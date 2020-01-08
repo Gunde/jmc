@@ -30,7 +30,7 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.openjdk.jmc.flightrecorder.ext.g1.visualizer;
+package org.openjdk.jmc.flightrecorder.ext.heaplayout.visualizer;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -59,9 +59,9 @@ import org.openjdk.jmc.common.unit.IRange;
 import org.openjdk.jmc.common.unit.QuantityRange;
 import org.openjdk.jmc.common.unit.UnitLookup;
 import org.openjdk.jmc.flightrecorder.JfrAttributes;
-import org.openjdk.jmc.flightrecorder.ext.g1.ColorMap;
-import org.openjdk.jmc.flightrecorder.ext.g1.G1Constants;
-import org.openjdk.jmc.flightrecorder.ext.g1.visualizer.region.HeapRegion;
+import org.openjdk.jmc.flightrecorder.ext.heaplayout.ColorMap;
+import org.openjdk.jmc.flightrecorder.ext.heaplayout.HeapLayoutConstants;
+import org.openjdk.jmc.flightrecorder.ext.heaplayout.visualizer.region.HeapRegion;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
 import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
 import org.openjdk.jmc.flightrecorder.ui.common.ItemRow;
@@ -201,9 +201,9 @@ public class HeapRegionView {
 		for (IItemIterable itemIterable : items) {
 			IType<IItem> type = itemIterable.getType();
 			IMemberAccessor<IQuantity, IItem> startTimeAccessor = JfrAttributes.START_TIME.getAccessor(type);
-			IMemberAccessor<IQuantity, IItem> indexAccessor = G1Constants.REGION_INDEX.getAccessor(type);
-			IMemberAccessor<IQuantity, IItem> usedAccessor = G1Constants.REGION_USED.getAccessor(type);
-			IMemberAccessor<String, IItem> typeAccessor = G1Constants.TYPE.getAccessor(type);
+			IMemberAccessor<IQuantity, IItem> indexAccessor = HeapLayoutConstants.REGION_INDEX.getAccessor(type);
+			IMemberAccessor<IQuantity, IItem> usedAccessor = HeapLayoutConstants.REGION_USED.getAccessor(type);
+			IMemberAccessor<String, IItem> typeAccessor = HeapLayoutConstants.TYPE.getAccessor(type);
 
 			for (IItem item : itemIterable) {
 				HeapRegion region = new HeapRegion(
@@ -224,8 +224,8 @@ public class HeapRegionView {
 					return new java.awt.Color(color.getRed(), color.getGreen(), color.getBlue());
 				}
 			});
-			ItemRow itemRow = new ItemRow(index.toString(), G1Constants.REGION_USED.getDescription(), build,
-					items.apply(ItemFilters.equals(G1Constants.REGION_INDEX, UnitLookup.NUMBER_UNITY.quantity(index))));
+			ItemRow itemRow = new ItemRow(index.toString(), HeapLayoutConstants.REGION_USED.getDescription(), build,
+					items.apply(ItemFilters.equals(HeapLayoutConstants.REGION_INDEX, UnitLookup.NUMBER_UNITY.quantity(index))));
 			rows.add(itemRow);
 		});
 		regionRows = RendererToolkit.uniformRows(rows);

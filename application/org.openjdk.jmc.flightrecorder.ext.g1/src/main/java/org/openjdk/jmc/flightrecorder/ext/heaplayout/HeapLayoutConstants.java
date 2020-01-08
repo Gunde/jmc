@@ -30,7 +30,7 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.openjdk.jmc.flightrecorder.ext.g1;
+package org.openjdk.jmc.flightrecorder.ext.heaplayout;
 
 import static org.openjdk.jmc.common.item.Attribute.attr;
 import static org.openjdk.jmc.common.unit.UnitLookup.MEMORY;
@@ -47,7 +47,7 @@ import org.openjdk.jmc.common.unit.IQuantity;
 import org.openjdk.jmc.flightrecorder.jdk.JdkTypeIDs;
 
 @SuppressWarnings("nls")
-public final class G1Constants {
+public final class HeapLayoutConstants {
 	public static final IAttribute<String> WHEN = attr("when", "When", PLAIN_TEXT);
 	public static final IAttribute<String> REGION_TYPE = attr("type", "Type", PLAIN_TEXT);
 	public static final IAttribute<String> REGION_TO_TYPE = attr("to", "To Type", PLAIN_TEXT);

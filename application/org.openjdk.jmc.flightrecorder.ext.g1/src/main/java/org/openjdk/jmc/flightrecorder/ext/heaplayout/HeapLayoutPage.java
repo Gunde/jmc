@@ -30,7 +30,7 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.openjdk.jmc.flightrecorder.ext.g1;
+package org.openjdk.jmc.flightrecorder.ext.heaplayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,11 +77,11 @@ import org.openjdk.jmc.common.unit.IQuantity;
 import org.openjdk.jmc.common.unit.UnitLookup;
 import org.openjdk.jmc.common.util.StateToolkit;
 import org.openjdk.jmc.flightrecorder.JfrAttributes;
-import org.openjdk.jmc.flightrecorder.ext.g1.visualizer.HeapLayout;
-import org.openjdk.jmc.flightrecorder.ext.g1.visualizer.HeapLayout.CurveType;
-import org.openjdk.jmc.flightrecorder.ext.g1.visualizer.HeapRegionSelectionEvent;
-import org.openjdk.jmc.flightrecorder.ext.g1.visualizer.HeapRegionView;
-import org.openjdk.jmc.flightrecorder.ext.g1.visualizer.region.HeapRegion;
+import org.openjdk.jmc.flightrecorder.ext.heaplayout.visualizer.HeapLayout;
+import org.openjdk.jmc.flightrecorder.ext.heaplayout.visualizer.HeapRegionSelectionEvent;
+import org.openjdk.jmc.flightrecorder.ext.heaplayout.visualizer.HeapRegionView;
+import org.openjdk.jmc.flightrecorder.ext.heaplayout.visualizer.HeapLayout.CurveType;
+import org.openjdk.jmc.flightrecorder.ext.heaplayout.visualizer.region.HeapRegion;
 import org.openjdk.jmc.flightrecorder.jdk.JdkAggregators;
 import org.openjdk.jmc.flightrecorder.jdk.JdkAttributes;
 import org.openjdk.jmc.flightrecorder.jdk.JdkFilters;
@@ -105,7 +105,7 @@ import org.openjdk.jmc.ui.misc.PersistableSashForm;
 
 // Remove this suppress when translation is required
 @SuppressWarnings("nls")
-public class G1Page extends AbstractDataPage {
+public class HeapLayoutPage extends AbstractDataPage {
 
 	public static class G1PageFactory implements IDataPageFactory {
 
@@ -121,7 +121,7 @@ public class G1Page extends AbstractDataPage {
 
 		@Override
 		public IDisplayablePage createPage(IPageDefinition definition, StreamModel items, IPageContainer editor) {
-			return new G1Page(definition, items, editor);
+			return new HeapLayoutPage(definition, items, editor);
 		}
 
 	}
@@ -193,7 +193,7 @@ public class G1Page extends AbstractDataPage {
 			loadColors(state);
 			Form form = DataPageToolkit.createForm(parent, toolkit, getName(), getIcon());
 			Composite heapVisualizationComposite = toolkit.createComposite(form.getBody(), SWT.NONE);
-			if (!getDataSource().getItems().apply(G1Constants.ALL_REGION_EVENTS).hasItems()) {
+			if (!getDataSource().getItems().apply(HeapLayoutConstants.ALL_REGION_EVENTS).hasItems()) {
 				Text error = new Text(form.getBody(), SWT.READ_ONLY);
 				error.setText("No G1 region events found");
 			} else {
@@ -247,9 +247,9 @@ public class G1Page extends AbstractDataPage {
 				heapVisualizer.addListener(SWT.Selection, e -> {
 					HeapRegionSelectionEvent event = (HeapRegionSelectionEvent) e;
 					IItemCollection regionStates = event.regionIndexes.size() == 0
-							? getDataSource().getItems().apply(G1Constants.ALL_REGION_EVENTS)
+							? getDataSource().getItems().apply(HeapLayoutConstants.ALL_REGION_EVENTS)
 							: getDataSource().getItems()
-									.apply(ItemFilters.memberOf(G1Constants.REGION_INDEX, event.regionIndexes));
+									.apply(ItemFilters.memberOf(HeapLayoutConstants.REGION_INDEX, event.regionIndexes));
 					pageContainer.showSelection(regionStates);
 					regionVisualizer.show(regionStates);
 				});
@@ -266,7 +266,7 @@ public class G1Page extends AbstractDataPage {
 						if (newTime == null) {
 							regionVisualizer.showGC(
 									getDataSource().getItems().apply(ItemFilters.hasAttribute(JdkAttributes.GC_ID)));
-							time = getDataSource().getItems().apply(G1Constants.HEAP_REGION_DUMPS)
+							time = getDataSource().getItems().apply(HeapLayoutConstants.HEAP_REGION_DUMPS)
 									.getAggregate(JdkAggregators.FIRST_ITEM_START);
 						} else {
 							IAggregator<Set<IQuantity>, ?> distinct = Aggregators.distinct(JdkAttributes.GC_ID);
@@ -284,7 +284,7 @@ public class G1Page extends AbstractDataPage {
 
 				if (heapDumps != null) {
 					heapVisualizer.show(heapDumps.get(0));
-					regionVisualizer.show(getDataSource().getItems().apply(G1Constants.ALL_REGION_EVENTS));
+					regionVisualizer.show(getDataSource().getItems().apply(HeapLayoutConstants.ALL_REGION_EVENTS));
 				} else {
 					heapVisualizer.show(null);
 				}
@@ -448,9 +448,9 @@ public class G1Page extends AbstractDataPage {
 			for (IItemIterable itemIterable : events) {
 				IType<IItem> type = itemIterable.getType();
 				IMemberAccessor<IQuantity, IItem> startTimeAccessor = JfrAttributes.START_TIME.getAccessor(type);
-				IMemberAccessor<IQuantity, IItem> indexAccessor = G1Constants.REGION_INDEX.getAccessor(type);
-				IMemberAccessor<IQuantity, IItem> usedAccessor = G1Constants.REGION_USED.getAccessor(type);
-				IMemberAccessor<String, IItem> typeAccessor = G1Constants.TYPE.getAccessor(type);
+				IMemberAccessor<IQuantity, IItem> indexAccessor = HeapLayoutConstants.REGION_INDEX.getAccessor(type);
+				IMemberAccessor<IQuantity, IItem> usedAccessor = HeapLayoutConstants.REGION_USED.getAccessor(type);
+				IMemberAccessor<String, IItem> typeAccessor = HeapLayoutConstants.TYPE.getAccessor(type);
 
 				for (IItem item : itemIterable) {
 					allRegions.add(
@@ -463,8 +463,8 @@ public class G1Page extends AbstractDataPage {
 		}
 
 		private void setUpHeapDumps() {
-			IItemCollection heapDumpEvents = getDataSource().getItems().apply(G1Constants.HEAP_REGION_DUMPS);
-			IAggregator<IQuantity, ?> maxIndexAggregator = Aggregators.max(G1Constants.REGION_INDEX);
+			IItemCollection heapDumpEvents = getDataSource().getItems().apply(HeapLayoutConstants.HEAP_REGION_DUMPS);
+			IAggregator<IQuantity, ?> maxIndexAggregator = Aggregators.max(HeapLayoutConstants.REGION_INDEX);
 			IQuantity maxIndex = getDataSource().getItems().getAggregate(maxIndexAggregator);
 			List<HeapRegion> allRegions = createRegionList(heapDumpEvents);
 			allRegions.sort((r1, r2) -> r1.getTimestamp().compareTo(r2.getTimestamp()));
@@ -486,7 +486,7 @@ public class G1Page extends AbstractDataPage {
 		}
 
 		private void setUpDeltas() {
-			IItemCollection deltas = getDataSource().getItems().apply(G1Constants.HEAP_REGION_TYPE_CHANGES);
+			IItemCollection deltas = getDataSource().getItems().apply(HeapLayoutConstants.HEAP_REGION_TYPE_CHANGES);
 			allRegionDeltas = createRegionList(deltas);
 			allRegionDeltas.sort((r1, r2) -> r1.getTimestamp().compareTo(r2.getTimestamp()));
 			heapRegionUpdateIterator = allRegionDeltas.listIterator();
@@ -618,7 +618,7 @@ public class G1Page extends AbstractDataPage {
 	private static Color HUMONGOUS = new Color(Display.getCurrent(), 240, 30, 240);
 	private static Color CONT_HUMONGOUS = new Color(Display.getCurrent(), 200, 10, 200);
 
-	public G1Page(IPageDefinition definition, StreamModel model, IPageContainer editor) {
+	public HeapLayoutPage(IPageDefinition definition, StreamModel model, IPageContainer editor) {
 		super(definition, model, editor);
 	}
 

@@ -36,8 +36,8 @@
    <extension
          point="org.openjdk.jmc.flightrecorder.ui.datapage">
       <factory
-            class="org.openjdk.jmc.flightrecorder.ext.g1.G1Page$G1PageFactory"
-            id="org.openjdk.jmc.flightrecorder.ext.g1">
+            class="org.openjdk.jmc.flightrecorder.ext.heaplayout.HeapLayoutPage$HeapLayoutPageFactory"
+            id="org.openjdk.jmc.flightrecorder.ext.heaplayout">
       </factory>
       <pages
             file="pages.xml"

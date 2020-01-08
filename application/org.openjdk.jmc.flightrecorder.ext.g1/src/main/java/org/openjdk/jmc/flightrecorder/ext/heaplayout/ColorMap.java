@@ -30,20 +30,33 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.openjdk.jmc.flightrecorder.ext.g1.visualizer;
+package org.openjdk.jmc.flightrecorder.ext.heaplayout;
 
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
+import org.openjdk.jmc.flightrecorder.ext.heaplayout.visualizer.region.HeapRegion;
 
-import org.openjdk.jmc.common.unit.IQuantity;
+public class ColorMap {
 
-public class HeapRegionSelectionEvent extends Event {
+	private Map<String, Color> colorMap;
 
-	public Set<IQuantity> regionIndexes;
+	public ColorMap(Map<String, Color> colorMap) {
+		this.colorMap = colorMap != null ? colorMap : new HashMap<>();
+	}
 
-	HeapRegionSelectionEvent(Set<IQuantity> regionIndexes) {
-		this.regionIndexes = regionIndexes;
+	public void updateColor(String type, Color color) {
+		colorMap.put(type, color);
+	}
+
+	public Color getColor(String type) {
+		return colorMap.getOrDefault(type, new Color(Display.getCurrent(), 240, 240, 240));
+	}
+
+	public Color getColor(HeapRegion region) {
+		return getColor(region.getType());
 	}
 
 }

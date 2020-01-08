@@ -30,7 +30,7 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.openjdk.jmc.flightrecorder.ext.g1.visualizer;
+package org.openjdk.jmc.flightrecorder.ext.heaplayout.visualizer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +51,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 import org.openjdk.jmc.common.unit.UnitLookup;
-import org.openjdk.jmc.flightrecorder.ext.g1.ColorMap;
-import org.openjdk.jmc.flightrecorder.ext.g1.visualizer.region.HeapRegion;
+import org.openjdk.jmc.flightrecorder.ext.heaplayout.ColorMap;
+import org.openjdk.jmc.flightrecorder.ext.heaplayout.visualizer.region.HeapRegion;
 
 // Remove this suppress when translation is required
 @SuppressWarnings("nls")
