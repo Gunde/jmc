@@ -38,6 +38,7 @@ import java.text.MessageFormat;
 import java.util.Set;
 
 import org.openjdk.jmc.common.item.Aggregators;
+import org.openjdk.jmc.common.item.IAggregator;
 import org.openjdk.jmc.common.item.IItemCollection;
 import org.openjdk.jmc.common.item.IItemFilter;
 import org.openjdk.jmc.common.item.ItemFilters;
@@ -214,7 +215,8 @@ public class StringDeduplicationRule extends AbstractRule {
 		double stringMaxRatio = 0;
 
 		// Check the string internal array ratio for each set of ObjectCount events = each gc.
-		Set<IQuantity> gcIds = objectCountItems.getAggregate(Aggregators.distinct(JdkAttributes.GC_ID));
+		IAggregator<Set<IQuantity>, ?> gcIdsAggregator = Aggregators.distinct(JdkAttributes.GC_ID);
+		Set<IQuantity> gcIds = objectCountItems.getAggregate(gcIdsAggregator);
 		for (IQuantity gcId : gcIds) {
 			IItemCollection livesetForGc = objectCountItems.apply(ItemFilters.equals(JdkAttributes.GC_ID, gcId));
 			IItemCollection stringObjectCountItems = livesetForGc.apply(STRING_FILTER);

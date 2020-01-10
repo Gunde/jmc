@@ -45,6 +45,7 @@ import java.util.concurrent.RunnableFuture;
 
 import org.openjdk.jmc.common.IDisplayable;
 import org.openjdk.jmc.common.item.Aggregators;
+import org.openjdk.jmc.common.item.IAggregator;
 import org.openjdk.jmc.common.item.IItemCollection;
 import org.openjdk.jmc.common.item.ItemFilters;
 import org.openjdk.jmc.common.unit.IQuantity;
@@ -142,9 +143,9 @@ public class LongGcPauseRule implements IRule {
 	}
 
 	private static String getSemiRefsMessage(IItemCollection items) {
-		IQuantity aggregate = items
-				.getAggregate(Aggregators.filter(Aggregators.max(JdkTypeIDs.GC_PAUSE_L1, JfrAttributes.DURATION),
-						ItemFilters.equals(JdkAttributes.GC_PHASE_NAME, "References"))); //$NON-NLS-1$
+		IAggregator<IQuantity, ?> aggregator = Aggregators.filter(Aggregators.max(JdkTypeIDs.GC_PAUSE_L1, JfrAttributes.DURATION),
+				ItemFilters.equals(JdkAttributes.GC_PHASE_NAME, "References")); //$NON-NLS-1$
+		IQuantity aggregate = items.getAggregate(aggregator);
 		if (aggregate == null) {
 			return null;
 		}

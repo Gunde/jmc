@@ -353,8 +353,8 @@ public class MethodProfilingRule implements IRule {
 								resultPair.right, resultPair.left.left, resultPair.left.right, windowRange));
 					}
 				} else {
-					Set<IQuantity> settingTimes = items.apply(settingsFilter)
-							.getAggregate(Aggregators.distinct(JfrAttributes.START_TIME));
+					IAggregator<Set<IQuantity>, ?> settingTimesAggregator = Aggregators.distinct(JfrAttributes.START_TIME);
+					Set<IQuantity> settingTimes = items.apply(settingsFilter).getAggregate(settingTimesAggregator);
 					IQuantity start = startTime;
 					List<Pair<Pair<IQuantity, IQuantity>, IMCStackTrace>> scores = new ArrayList<>(settingTimes.size());
 					for (IQuantity settingTime : settingTimes) {

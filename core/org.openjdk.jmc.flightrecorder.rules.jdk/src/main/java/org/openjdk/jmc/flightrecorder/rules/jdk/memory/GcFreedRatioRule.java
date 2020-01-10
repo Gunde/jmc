@@ -42,6 +42,7 @@ import java.util.Set;
 
 import org.openjdk.jmc.common.IDisplayable;
 import org.openjdk.jmc.common.item.Aggregators;
+import org.openjdk.jmc.common.item.IAggregator;
 import org.openjdk.jmc.common.item.IItemCollection;
 import org.openjdk.jmc.common.item.ItemFilters;
 import org.openjdk.jmc.common.unit.IQuantity;
@@ -212,7 +213,8 @@ public class GcFreedRatioRule extends AbstractRule {
 				IQuantity newEndTime = null;
 				IItemCollection heapSummaryWindowItems = windowItems.apply(JdkFilters.HEAP_SUMMARY);
 				IItemCollection heapSummaryAllItems = allItems.apply(JdkFilters.HEAP_SUMMARY);
-				IQuantity lowestGcId = heapSummaryWindowItems.getAggregate(Aggregators.min(JdkAttributes.GC_ID));
+				IAggregator<IQuantity, ?> minGcIdAggregator = Aggregators.min(JdkAttributes.GC_ID);
+				IQuantity lowestGcId = heapSummaryWindowItems.getAggregate(minGcIdAggregator);
 				IItemCollection lowestGcIdWindowItems = heapSummaryWindowItems
 						.apply(ItemFilters.equals(JdkAttributes.GC_ID, lowestGcId));
 				IItemCollection lowestGcIdAllItems = heapSummaryAllItems
@@ -228,7 +230,8 @@ public class GcFreedRatioRule extends AbstractRule {
 						newStartTime = lowestGcIdBeforeAllItems.getAggregate(JdkAggregators.FIRST_ITEM_END);
 					}
 				}
-				IQuantity highestGcId = heapSummaryWindowItems.getAggregate(Aggregators.max(JdkAttributes.GC_ID));
+				IAggregator<IQuantity, ?> maxGcIdAggregator = Aggregators.max(JdkAttributes.GC_ID);
+				IQuantity highestGcId = heapSummaryWindowItems.getAggregate(maxGcIdAggregator);
 				IItemCollection highestGcIdWindowItems = heapSummaryWindowItems
 						.apply(ItemFilters.equals(JdkAttributes.GC_ID, highestGcId));
 				IItemCollection highestGcIdAllItems = heapSummaryAllItems
@@ -256,8 +259,8 @@ public class GcFreedRatioRule extends AbstractRule {
 				}
 
 				// Filter out those that don't have matching before/after pairs
-				Set<IQuantity> gcIds = windowItems.apply(JdkFilters.HEAP_SUMMARY)
-						.getAggregate(Aggregators.distinct(JdkAttributes.GC_ID));
+				IAggregator<Set<IQuantity>, ?> distinctGcIdAggregator = Aggregators.distinct(JdkAttributes.GC_ID);
+				Set<IQuantity> gcIds = windowItems.apply(JdkFilters.HEAP_SUMMARY).getAggregate(distinctGcIdAggregator);
 				for (Iterator<IQuantity> iterator = gcIds.iterator(); iterator.hasNext();) {
 					IQuantity gcId = iterator.next();
 					IItemCollection gcItems = windowItems.apply(ItemFilters.equals(JdkAttributes.GC_ID, gcId));

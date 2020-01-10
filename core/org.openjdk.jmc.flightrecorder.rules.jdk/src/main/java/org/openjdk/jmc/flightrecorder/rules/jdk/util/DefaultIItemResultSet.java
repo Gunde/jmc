@@ -92,7 +92,8 @@ final class DefaultIItemResultSet implements IItemResultSet {
 				}
 			}
 		} else {
-			Set<?> aggregate = input.getAggregate(Aggregators.distinct(query.getGroupBy()));
+			IAggregator<?, ?> distinct = Aggregators.distinct(query.getGroupBy());
+			Set<?> aggregate = (Set<?>) input.getAggregate(distinct);
 			if (aggregate != null) {
 				for (Object o : aggregate) {
 					IItemCollection rowCollection = input.apply(ItemFilters.equals((IAttribute) query.getGroupBy(), o));

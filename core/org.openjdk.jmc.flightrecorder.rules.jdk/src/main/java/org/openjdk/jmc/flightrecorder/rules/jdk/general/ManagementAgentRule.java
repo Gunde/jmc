@@ -40,6 +40,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
 
 import org.openjdk.jmc.common.item.Aggregators;
+import org.openjdk.jmc.common.item.IAggregator;
 import org.openjdk.jmc.common.item.IItemCollection;
 import org.openjdk.jmc.common.item.ItemFilters;
 import org.openjdk.jmc.common.util.IPreferenceValueProvider;
@@ -68,15 +69,16 @@ public class ManagementAgentRule implements IRule {
 		// FIXME: Move the filter inside the aggregate.
 		IItemCollection properties = items.apply(JdkFilters.SYSTEM_PROPERTIES);
 
+		IAggregator<Set<String>, ?> distinctEnvVarsAggregator = Aggregators.distinct(JdkAttributes.ENVIRONMENT_VALUE);
 		Set<String> portStr = properties
 				.apply(ItemFilters.equals(JdkAttributes.ENVIRONMENT_KEY, "com.sun.management.jmxremote.port")) //$NON-NLS-1$
-				.getAggregate(Aggregators.distinct(JdkAttributes.ENVIRONMENT_VALUE));
+				.getAggregate(distinctEnvVarsAggregator);
 		Set<String> authStr = properties
 				.apply(ItemFilters.equals(JdkAttributes.ENVIRONMENT_KEY, "com.sun.management.jmxremote.authenticate")) //$NON-NLS-1$
-				.getAggregate(Aggregators.distinct(JdkAttributes.ENVIRONMENT_VALUE));
+				.getAggregate(distinctEnvVarsAggregator);
 		Set<String> sslStr = properties
 				.apply(ItemFilters.equals(JdkAttributes.ENVIRONMENT_KEY, "com.sun.management.jmxremote.ssl")) //$NON-NLS-1$
-				.getAggregate(Aggregators.distinct(JdkAttributes.ENVIRONMENT_VALUE));
+				.getAggregate(distinctEnvVarsAggregator);
 
 		if (size(portStr) > 1 || size(authStr) > 1 || size(sslStr) > 1) {
 			return new Result(this, 50, Messages.getString(Messages.ManagementAgentRule_TEXT_INFO),

@@ -227,8 +227,8 @@ public class FewSampledThreadsRule extends AbstractRule {
 			IQuantity jvmUsage = jvmUsageMaxWindow.left;
 
 			// How much cpu could max be used if this is a single threaded application (not counting the JVM threads though...)
-			IQuantity cores = items.apply(ItemFilters.type(JdkTypeIDs.CPU_INFORMATION))
-					.getAggregate(Aggregators.max(JdkAttributes.NUMBER_OF_CORES));
+			IAggregator<IQuantity, ?> maxCoresAggregator = Aggregators.max(JdkAttributes.NUMBER_OF_CORES);
+			IQuantity cores = items.apply(ItemFilters.type(JdkTypeIDs.CPU_INFORMATION)).getAggregate(maxCoresAggregator);
 			IQuantity maxSingleThreadedCpu = PERCENT.quantity(100 / cores.doubleValue());
 
 			IQuantity maxCpuForSampledThreads = PERCENT
@@ -285,7 +285,7 @@ public class FewSampledThreadsRule extends AbstractRule {
 	}
 
 	private static IQuantity getHardwareThreads(IItemCollection items) {
-		return items.apply(ItemFilters.type(JdkTypeIDs.CPU_INFORMATION))
-				.getAggregate(Aggregators.max(JdkAttributes.HW_THREADS));
+		IAggregator<IQuantity, ?> max = Aggregators.max(JdkAttributes.HW_THREADS);
+		return items.apply(ItemFilters.type(JdkTypeIDs.CPU_INFORMATION)).getAggregate(max);
 	}
 }

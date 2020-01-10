@@ -42,6 +42,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
 
 import org.openjdk.jmc.common.item.Aggregators;
+import org.openjdk.jmc.common.item.IAggregator;
 import org.openjdk.jmc.common.item.IItemCollection;
 import org.openjdk.jmc.common.util.IPreferenceValueProvider;
 import org.openjdk.jmc.common.util.StringToolkit;
@@ -72,7 +73,8 @@ public class DuplicateFlagsRule implements IRule {
 		IItemCollection jvmInfoItems = items.apply(JdkFilters.VM_INFO);
 
 		// FIXME: Should we check if there are different jvm args in different chunks?
-		Set<String> args = jvmInfoItems.getAggregate(Aggregators.distinct(JdkAttributes.JVM_ARGUMENTS));
+		IAggregator<Set<String>, ?> jvmArgsAggregator = Aggregators.distinct(JdkAttributes.JVM_ARGUMENTS);
+		Set<String> args = jvmInfoItems.getAggregate(jvmArgsAggregator);
 		if (args != null && !args.isEmpty()) {
 
 			Collection<ArrayList<String>> dupes = JvmInternalsDataProvider.checkDuplicates(args.iterator().next());

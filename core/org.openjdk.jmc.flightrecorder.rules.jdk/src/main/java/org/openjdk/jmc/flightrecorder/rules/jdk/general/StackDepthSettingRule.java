@@ -84,7 +84,8 @@ public class StackDepthSettingRule implements IRule {
 			IItemCollection truncatedTraces = items.apply(truncatedTracesFilter);
 			Map<String, Integer> truncatedTraceCounts = getTraceCount(truncatedTraces);
 			Set<String> eventTypes = new HashSet<>();
-			for (IType<?> type : truncatedTraces.getAggregate(Aggregators.distinct(JfrAttributes.EVENT_TYPE))) {
+			IAggregator<Set<IType<?>>, ?> eventTypesAggregator = Aggregators.distinct(JfrAttributes.EVENT_TYPE);
+			for (IType<?> type : truncatedTraces.getAggregate(eventTypesAggregator)) {
 				eventTypes.add(type.getIdentifier());
 			}
 			Map<String, Integer> allTraceCounts = getTraceCount(items.apply(ItemFilters.type(eventTypes)));

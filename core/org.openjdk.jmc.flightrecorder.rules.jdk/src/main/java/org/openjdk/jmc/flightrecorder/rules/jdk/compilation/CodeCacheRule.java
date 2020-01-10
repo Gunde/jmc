@@ -44,6 +44,7 @@ import java.util.concurrent.RunnableFuture;
 
 import org.openjdk.jmc.common.IDisplayable;
 import org.openjdk.jmc.common.item.Aggregators;
+import org.openjdk.jmc.common.item.IAggregator;
 import org.openjdk.jmc.common.item.IItem;
 import org.openjdk.jmc.common.item.IItemCollection;
 import org.openjdk.jmc.common.item.IType;
@@ -167,31 +168,36 @@ public class CodeCacheRule implements IRule {
 			if (!ccType.hasAttribute(JdkAttributes.PROFILED_SIZE)) {
 				return RulesToolkit.getMissingAttributeResult(this, ccType, JdkAttributes.PROFILED_SIZE);
 			}
-			IQuantity profiledAggregate = items
-					.getAggregate(Aggregators.filter(Aggregators.min(JdkAttributes.UNALLOCATED),
-							ItemFilters.matches(JdkAttributes.CODE_HEAP, PROFILED_NAME)));
+			IAggregator<IQuantity, ?> profiledAggregator = Aggregators.filter(Aggregators.min(JdkAttributes.UNALLOCATED),
+					ItemFilters.matches(JdkAttributes.CODE_HEAP, PROFILED_NAME));
+			IQuantity profiledAggregate = items.getAggregate(profiledAggregator);
 			IQuantity profiledRatio = null;
 			if (profiledAggregate != null) {
+				IAggregator<IQuantity, ?> minProfiledSizeAggregator = Aggregators.min(JdkAttributes.PROFILED_SIZE);
 				profiledRatio = UnitLookup.PERCENT_UNITY.quantity(
-						profiledAggregate.ratioTo(items.getAggregate(Aggregators.min(JdkAttributes.PROFILED_SIZE))));
+						profiledAggregate.ratioTo(items.getAggregate(minProfiledSizeAggregator)));
 			} else {
 				profiledRatio = UnitLookup.PERCENT_UNITY.quantity(1.0);
 			}
+			IAggregator<IQuantity, ?> minUnallocatedAggregator = Aggregators.filter(Aggregators.min(JdkAttributes.UNALLOCATED),
+					ItemFilters.matches(JdkAttributes.CODE_HEAP, NON_PROFILED_NAME));
 			IQuantity nonProfiledAggregate = items
-					.getAggregate(Aggregators.filter(Aggregators.min(JdkAttributes.UNALLOCATED),
-							ItemFilters.matches(JdkAttributes.CODE_HEAP, NON_PROFILED_NAME)));
+					.getAggregate(minUnallocatedAggregator);
 			IQuantity nonProfiledRatio = null;
 			if (nonProfiledAggregate != null) {
+				IAggregator<IQuantity, ?> nonProfiledSizeAggregator = Aggregators.min(JdkAttributes.NON_PROFILED_SIZE);
 				nonProfiledRatio = UnitLookup.PERCENT_UNITY.quantity(nonProfiledAggregate
-						.ratioTo(items.getAggregate(Aggregators.min(JdkAttributes.NON_PROFILED_SIZE))));
+						.ratioTo(items.getAggregate(nonProfiledSizeAggregator)));
 			} else {
 				nonProfiledRatio = UnitLookup.PERCENT_UNITY.quantity(1.0);
 			}
 
+			IAggregator<IQuantity, ?> filteredAggregator = Aggregators.filter(Aggregators.min(JdkAttributes.UNALLOCATED),
+					ItemFilters.matches(JdkAttributes.CODE_HEAP, NON_NMETHODS_NAME));
+			IAggregator<IQuantity, ?> leastNonNmethodSizeAggregator = Aggregators.min(JdkAttributes.NON_NMETHOD_SIZE);
 			IQuantity nonNMethodsRatio = UnitLookup.PERCENT_UNITY.quantity(items
-					.getAggregate(Aggregators.filter(Aggregators.min(JdkAttributes.UNALLOCATED),
-							ItemFilters.matches(JdkAttributes.CODE_HEAP, NON_NMETHODS_NAME)))
-					.ratioTo(items.getAggregate(Aggregators.min(JdkAttributes.NON_NMETHOD_SIZE))));
+					.getAggregate(filteredAggregator)
+					.ratioTo(items.getAggregate(leastNonNmethodSizeAggregator)));
 			List<CodeHeapData> heaps = new ArrayList<>();
 			addIfHalfFull(profiledRatio, heaps, PROFILED_NAME);
 			addIfHalfFull(nonProfiledRatio, heaps, NON_PROFILED_NAME);
@@ -230,12 +236,11 @@ public class CodeCacheRule implements IRule {
 			if (!ccType.hasAttribute(JdkAttributes.RESERVED_SIZE)) {
 				return RulesToolkit.getMissingAttributeResult(this, ccType, JdkAttributes.RESERVED_SIZE);
 			}
-			IQuantity codeCacheReserved = items
-					.getAggregate(Aggregators.min(JdkTypeIDs.CODE_CACHE_CONFIG, JdkAttributes.RESERVED_SIZE));
-			IQuantity unallocated = items
-					.getAggregate(Aggregators.min(JdkTypeIDs.CODE_CACHE_STATISTICS, JdkAttributes.UNALLOCATED));
-			IQuantity unallocatedCodeCachePercent = UnitLookup.PERCENT_UNITY
-					.quantity(unallocated.ratioTo(codeCacheReserved));
+			IAggregator<IQuantity, ?> codeCacheReservedAggregator = Aggregators.min(JdkTypeIDs.CODE_CACHE_CONFIG, JdkAttributes.RESERVED_SIZE);
+			IQuantity codeCacheReserved = items.getAggregate(codeCacheReservedAggregator);
+			IAggregator<IQuantity, ?> unallocatedAggregator = Aggregators.min(JdkTypeIDs.CODE_CACHE_STATISTICS, JdkAttributes.UNALLOCATED);
+			IQuantity unallocated = items.getAggregate(unallocatedAggregator);
+			IQuantity unallocatedCodeCachePercent = UnitLookup.PERCENT_UNITY.quantity(unallocated.ratioTo(codeCacheReserved));
 			allocationRatioScore = RulesToolkit.mapExp100(
 					100 - unallocatedCodeCachePercent.doubleValueIn(UnitLookup.PERCENT),
 					infoPreferenceValue.doubleValueIn(UnitLookup.PERCENT),

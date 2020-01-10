@@ -42,6 +42,7 @@ import java.util.concurrent.RunnableFuture;
 
 import org.openjdk.jmc.common.IDisplayable;
 import org.openjdk.jmc.common.item.Aggregators;
+import org.openjdk.jmc.common.item.IAggregator;
 import org.openjdk.jmc.common.item.IItemCollection;
 import org.openjdk.jmc.common.unit.IQuantity;
 import org.openjdk.jmc.common.unit.UnitLookup;
@@ -91,7 +92,8 @@ public class ClassLoadingRule implements IRule {
 		IQuantity endTime = events.getAggregate(JdkAggregators.LAST_ITEM_END);
 		if (startTime != null && endTime != null) {
 			IQuantity totalTime = endTime.subtract(startTime);
-			IQuantity max = events.getAggregate(Aggregators.max(JfrAttributes.DURATION));
+			IAggregator<IQuantity, ?> max2 = Aggregators.max(JfrAttributes.DURATION);
+			IQuantity max = events.getAggregate(max2);
 			IQuantity sum = events.getAggregate(Aggregators.sum(JfrAttributes.DURATION));
 			// FIXME: Consider using a score function instead of set value.
 			if ((max.compareTo(maxDurationLimit) > 0) || (sum.ratioTo(totalTime) > ratioOfTotalLimit.doubleValue())) {

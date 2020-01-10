@@ -44,6 +44,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
 
 import org.openjdk.jmc.common.IDisplayable;
+import org.openjdk.jmc.common.item.IAggregator;
 import org.openjdk.jmc.common.item.IItemCollection;
 import org.openjdk.jmc.common.unit.IQuantity;
 import org.openjdk.jmc.common.util.IPreferenceValueProvider;
@@ -77,7 +78,8 @@ public class BufferLostRule implements IRule {
 		 */
 
 		IItemCollection filtered = items.apply(JdkFilters.JFR_DATA_LOST);
-		IQuantity startTime = filtered.getAggregate(JdkAggregators.first(JfrAttributes.START_TIME));
+		IAggregator<IQuantity, ?> startTimeAggregator = JdkAggregators.first(JfrAttributes.START_TIME);
+		IQuantity startTime = filtered.getAggregate(startTimeAggregator);
 
 		if (startTime != null) {
 			IQuantity droppedCount = filtered.getAggregate(JdkAggregators.JFR_DATA_LOST_COUNT);

@@ -51,6 +51,7 @@ import org.openjdk.jmc.common.IDisplayable;
 import org.openjdk.jmc.common.IMCType;
 import org.openjdk.jmc.common.collection.MapToolkit.IntEntry;
 import org.openjdk.jmc.common.item.Aggregators;
+import org.openjdk.jmc.common.item.IAggregator;
 import org.openjdk.jmc.common.item.IItemCollection;
 import org.openjdk.jmc.common.item.IItemFilter;
 import org.openjdk.jmc.common.item.ItemFilters;
@@ -116,9 +117,9 @@ public class ErrorRule implements IRule {
 			IItemFilter errorsExcludingExclude = ItemFilters.and(ItemFilters.type(JdkTypeIDs.ERRORS_THROWN),
 					ItemFilters.not(matchesExclude));
 			errorItems = errorItems.apply(errorsExcludingExclude);
-			excludedErrors = items.getAggregate(
-					Aggregators.filter(Aggregators.count(), ItemFilters.and(ItemFilters.type(JdkTypeIDs.ERRORS_THROWN),
-							ItemFilters.matches(JdkAttributes.EXCEPTION_THROWNCLASS_NAME, errorExcludeRegexp))));
+			IAggregator<IQuantity, ?> filter = Aggregators.filter(Aggregators.count(), ItemFilters.and(ItemFilters.type(JdkTypeIDs.ERRORS_THROWN),
+					ItemFilters.matches(JdkAttributes.EXCEPTION_THROWNCLASS_NAME, errorExcludeRegexp)));
+			excludedErrors = items.getAggregate(filter);
 		}
 		IQuantity errorCount = errorItems.getAggregate(JdkAggregators.ERROR_COUNT);
 		if (errorCount != null && errorCount.doubleValue() > 0) {
