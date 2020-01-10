@@ -19,7 +19,7 @@ public class UiStreamModel extends StreamModel {
 	public UiStreamModel(EventArray[] eventsByType) {
 		super(eventsByType);
 	}
-	
+
 	public EventTypeFolderNode getTypeTree(Stream<IItemIterable> items) {
 		Map<IType<IItem>, Long> itemCountByType = items
 				.collect(Collectors.toMap(IItemIterable::getType, is -> is.getItemCount(), Long::sum));
