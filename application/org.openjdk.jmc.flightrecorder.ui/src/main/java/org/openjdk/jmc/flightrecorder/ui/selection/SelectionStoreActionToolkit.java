@@ -49,7 +49,7 @@ import org.openjdk.jmc.common.item.IType;
 import org.openjdk.jmc.common.item.RangeMatchPolicy;
 import org.openjdk.jmc.common.unit.IQuantity;
 import org.openjdk.jmc.common.unit.IRange;
-import org.openjdk.jmc.flightrecorder.ui.ItemCollectionToolkit;
+import org.openjdk.jmc.flightrecorder.ItemCollectionToolkit;
 import org.openjdk.jmc.flightrecorder.ui.common.ItemHistogram;
 import org.openjdk.jmc.flightrecorder.ui.common.ItemList;
 import org.openjdk.jmc.flightrecorder.ui.common.ItemRow;

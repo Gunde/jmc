@@ -91,7 +91,7 @@ import org.openjdk.jmc.flightrecorder.ui.IDisplayablePage;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
 import org.openjdk.jmc.flightrecorder.ui.IPageDefinition;
 import org.openjdk.jmc.flightrecorder.ui.IPageUI;
-import org.openjdk.jmc.flightrecorder.ui.StreamModel;
+import org.openjdk.jmc.flightrecorder.ui.UiStreamModel;
 import org.openjdk.jmc.flightrecorder.ui.common.AbstractDataPage;
 import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
 import org.openjdk.jmc.flightrecorder.ui.common.ImageConstants;
@@ -120,7 +120,7 @@ public class G1Page extends AbstractDataPage {
 		}
 
 		@Override
-		public IDisplayablePage createPage(IPageDefinition definition, StreamModel items, IPageContainer editor) {
+		public IDisplayablePage createPage(IPageDefinition definition, UiStreamModel items, IPageContainer editor) {
 			return new G1Page(definition, items, editor);
 		}
 
@@ -618,7 +618,7 @@ public class G1Page extends AbstractDataPage {
 	private static Color HUMONGOUS = new Color(Display.getCurrent(), 240, 30, 240);
 	private static Color CONT_HUMONGOUS = new Color(Display.getCurrent(), 200, 10, 200);
 
-	public G1Page(IPageDefinition definition, StreamModel model, IPageContainer editor) {
+	public G1Page(IPageDefinition definition, UiStreamModel model, IPageContainer editor) {
 		super(definition, model, editor);
 	}
 

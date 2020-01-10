@@ -45,7 +45,7 @@ import org.openjdk.jmc.flightrecorder.ui.IDataPageFactory;
 import org.openjdk.jmc.flightrecorder.ui.IDisplayablePage;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
 import org.openjdk.jmc.flightrecorder.ui.IPageDefinition;
-import org.openjdk.jmc.flightrecorder.ui.StreamModel;
+import org.openjdk.jmc.flightrecorder.ui.UiStreamModel;
 import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
 import org.openjdk.jmc.flightrecorder.ui.common.ImageConstants;
 import org.openjdk.jmc.flightrecorder.ui.messages.internal.Messages;
@@ -69,12 +69,12 @@ public class EnvironmentVariablesPage extends DistinctItemsPage {
 		}
 
 		@Override
-		public IDisplayablePage createPage(IPageDefinition dpd, StreamModel items, IPageContainer editor) {
+		public IDisplayablePage createPage(IPageDefinition dpd, UiStreamModel items, IPageContainer editor) {
 			return new EnvironmentVariablesPage(dpd, items, editor);
 		}
 	}
 
-	public EnvironmentVariablesPage(IPageDefinition dpd, StreamModel items, IPageContainer editor) {
+	public EnvironmentVariablesPage(IPageDefinition dpd, UiStreamModel items, IPageContainer editor) {
 		super(dpd, items, editor);
 		setTableDefinition(JdkQueries.ENVIRONMENT_VARIABLE);
 		setLabelProvider(DataPageToolkit.createTableHighlightProvider(PasswordsInArgumentsRule.PASSWORD_PATTERN, true));

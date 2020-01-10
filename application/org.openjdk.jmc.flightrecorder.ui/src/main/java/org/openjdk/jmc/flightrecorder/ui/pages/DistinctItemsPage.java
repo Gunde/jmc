@@ -42,10 +42,11 @@ import org.openjdk.jmc.common.IState;
 import org.openjdk.jmc.common.IWritableState;
 import org.openjdk.jmc.common.item.IItemFilter;
 import org.openjdk.jmc.common.item.IItemQuery;
+import org.openjdk.jmc.flightrecorder.StreamModel;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
 import org.openjdk.jmc.flightrecorder.ui.IPageDefinition;
 import org.openjdk.jmc.flightrecorder.ui.IPageUI;
-import org.openjdk.jmc.flightrecorder.ui.StreamModel;
+import org.openjdk.jmc.flightrecorder.ui.UiStreamModel;
 import org.openjdk.jmc.flightrecorder.ui.common.AbstractDataPage;
 import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
 import org.openjdk.jmc.flightrecorder.ui.common.FilterComponent;
@@ -121,7 +122,7 @@ class DistinctItemsPage extends AbstractDataPage {
 	private IItemFilter tableFilter;
 	private SelectionState tableSelection;
 
-	public DistinctItemsPage(IPageDefinition dpd, StreamModel items, IPageContainer editor) {
+	public DistinctItemsPage(IPageDefinition dpd, UiStreamModel items, IPageContainer editor) {
 		super(dpd, items, editor);
 	}
 

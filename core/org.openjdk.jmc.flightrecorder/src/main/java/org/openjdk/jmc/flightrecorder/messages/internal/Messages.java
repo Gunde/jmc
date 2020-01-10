@@ -62,6 +62,8 @@ public class Messages {
 	public static final String JfrThread_UNKNOWN_THREAD_GROUP = "JfrThread_UNKNOWN_THREAD_GROUP"; //$NON-NLS-1$
 	public static final String JfrThread_UNKNOWN_THREAD_NAME = "JfrThread_UNKNOWN_THREAD_NAME"; //$NON-NLS-1$
 	public static final String TypeManager_EXPERIMENTAL_TYPE = "TypeManager_EXPERIMENTAL_TYPE"; //$NON-NLS-1$
+	
+	public static final String ITEM_COLLECTION_DESC = "ITEM_COLLECTION_DESC"; //$NON-NLS-1$
 
 	private Messages() {
 	}

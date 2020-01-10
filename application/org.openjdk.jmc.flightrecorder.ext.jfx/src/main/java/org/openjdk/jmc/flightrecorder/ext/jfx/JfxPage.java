@@ -55,15 +55,16 @@ import org.openjdk.jmc.common.item.IItemCollection;
 import org.openjdk.jmc.common.item.IItemFilter;
 import org.openjdk.jmc.common.unit.IQuantity;
 import org.openjdk.jmc.common.unit.IRange;
+import org.openjdk.jmc.flightrecorder.ItemCollectionToolkit;
 import org.openjdk.jmc.flightrecorder.JfrAttributes;
+import org.openjdk.jmc.flightrecorder.StreamModel;
 import org.openjdk.jmc.flightrecorder.ext.jfx.JfxVersionUtil.JavaFxEventAvailability;
 import org.openjdk.jmc.flightrecorder.ui.IDataPageFactory;
 import org.openjdk.jmc.flightrecorder.ui.IDisplayablePage;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
 import org.openjdk.jmc.flightrecorder.ui.IPageDefinition;
 import org.openjdk.jmc.flightrecorder.ui.IPageUI;
-import org.openjdk.jmc.flightrecorder.ui.ItemCollectionToolkit;
-import org.openjdk.jmc.flightrecorder.ui.StreamModel;
+import org.openjdk.jmc.flightrecorder.ui.UiStreamModel;
 import org.openjdk.jmc.flightrecorder.ui.common.AbstractDataPage;
 import org.openjdk.jmc.flightrecorder.ui.common.AggregationGrid;
 import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
@@ -109,7 +110,7 @@ public class JfxPage extends AbstractDataPage {
 		}
 
 		@Override
-		public IDisplayablePage createPage(IPageDefinition definition, StreamModel items, IPageContainer editor) {
+		public IDisplayablePage createPage(IPageDefinition definition, UiStreamModel items, IPageContainer editor) {
 			return new JfxPage(definition, items, editor);
 		}
 	}
@@ -363,7 +364,7 @@ public class JfxPage extends AbstractDataPage {
 	private IItemFilter phasesTableFilter;
 	private IItemFilter inputTableFilter;
 
-	public JfxPage(IPageDefinition definition, StreamModel items, IPageContainer editor) {
+	public JfxPage(IPageDefinition definition, UiStreamModel items, IPageContainer editor) {
 		super(definition, items, editor);
 		timelineRange = editor.getRecordingRange();
 	}

@@ -99,7 +99,7 @@ public class JfrLoaderToolkit {
 	public static IItemCollection loadEvents(InputStream stream, List<? extends IParserExtension> extensions)
 			throws IOException, CouldNotLoadRecordingException {
 		InputStream in = IOToolkit.openUncompressedStream(stream);
-		return EventCollection.build(FlightRecordingLoader.loadStream(in, extensions, false, true));
+		return StreamModel.build(FlightRecordingLoader.loadStream(in, extensions, false, true));
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class JfrLoaderToolkit {
 	 */
 	public static IItemCollection loadEvents(List<File> files, List<? extends IParserExtension> extensions)
 			throws IOException, CouldNotLoadRecordingException {
-		return EventCollection.build(loadFile(files, extensions));
+		return StreamModel.build(loadFile(files, extensions));
 	}
 
 }

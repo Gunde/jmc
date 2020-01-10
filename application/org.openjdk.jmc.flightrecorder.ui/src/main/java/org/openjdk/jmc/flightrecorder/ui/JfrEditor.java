@@ -102,7 +102,7 @@ public class JfrEditor extends EditorPart implements INavigationLocationProvider
 
 	private FormToolkit toolkit;
 	private Composite resultContainer;
-	private StreamModel items;
+	private UiStreamModel items;
 	private IRange<IQuantity> fullRange;
 	private final Map<DataPageDescriptor, IDisplayablePage> pageMap = new HashMap<>();
 	private DataPageDescriptor currentPage;
@@ -198,7 +198,7 @@ public class JfrEditor extends EditorPart implements INavigationLocationProvider
 		return fullRange;
 	}
 
-	StreamModel getModel() {
+	UiStreamModel getModel() {
 		return items;
 	}
 
@@ -375,7 +375,7 @@ public class JfrEditor extends EditorPart implements INavigationLocationProvider
 
 	void repositoryLoaded(EventArray[] repo, IRange<IQuantity> fullRange) {
 		if (!resultContainer.isDisposed()) {
-			items = new StreamModel(repo);
+			items = new UiStreamModel(repo);
 			this.fullRange = fullRange;
 			try {
 				getSite().getPage().showView(CONTENT_OUTLINE_VIEW_ID, null, IWorkbenchPage.VIEW_VISIBLE);

@@ -71,6 +71,7 @@ import org.openjdk.jmc.common.item.ItemFilters;
 import org.openjdk.jmc.common.unit.IQuantity;
 import org.openjdk.jmc.common.unit.IRange;
 import org.openjdk.jmc.common.util.StateToolkit;
+import org.openjdk.jmc.flightrecorder.ItemCollectionToolkit;
 import org.openjdk.jmc.flightrecorder.jdk.JdkAggregators;
 import org.openjdk.jmc.flightrecorder.jdk.JdkAttributes;
 import org.openjdk.jmc.flightrecorder.jdk.JdkTypeIDs;
@@ -83,8 +84,7 @@ import org.openjdk.jmc.flightrecorder.ui.IDisplayablePage;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
 import org.openjdk.jmc.flightrecorder.ui.IPageDefinition;
 import org.openjdk.jmc.flightrecorder.ui.IPageUI;
-import org.openjdk.jmc.flightrecorder.ui.ItemCollectionToolkit;
-import org.openjdk.jmc.flightrecorder.ui.StreamModel;
+import org.openjdk.jmc.flightrecorder.ui.UiStreamModel;
 import org.openjdk.jmc.flightrecorder.ui.common.AbstractDataPage;
 import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
 import org.openjdk.jmc.flightrecorder.ui.common.FilterComponent;
@@ -128,7 +128,7 @@ public class MemoryLeakPage extends AbstractDataPage {
 		}
 
 		@Override
-		public IDisplayablePage createPage(IPageDefinition definition, StreamModel items, IPageContainer editor) {
+		public IDisplayablePage createPage(IPageDefinition definition, UiStreamModel items, IPageContainer editor) {
 			return new MemoryLeakPage(definition, items, editor);
 		}
 
@@ -452,7 +452,7 @@ public class MemoryLeakPage extends AbstractDataPage {
 		return new MemoryLeakPageUI(parent, toolkit, editor, state);
 	}
 
-	public MemoryLeakPage(IPageDefinition definition, StreamModel model, IPageContainer editor) {
+	public MemoryLeakPage(IPageDefinition definition, UiStreamModel model, IPageContainer editor) {
 		super(definition, model, editor);
 		visibleRange = editor.getRecordingRange();
 	}

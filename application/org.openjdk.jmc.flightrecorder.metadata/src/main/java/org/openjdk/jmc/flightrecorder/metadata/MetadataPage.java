@@ -56,12 +56,12 @@ import org.openjdk.jmc.common.IState;
 import org.openjdk.jmc.common.IWritableState;
 import org.openjdk.jmc.common.item.IItemIterable;
 import org.openjdk.jmc.common.item.IType;
+import org.openjdk.jmc.flightrecorder.ItemCollectionToolkit;
 import org.openjdk.jmc.flightrecorder.ui.IDisplayablePage;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
 import org.openjdk.jmc.flightrecorder.ui.IPageDefinition;
 import org.openjdk.jmc.flightrecorder.ui.IPageUI;
-import org.openjdk.jmc.flightrecorder.ui.ItemCollectionToolkit;
-import org.openjdk.jmc.flightrecorder.ui.StreamModel;
+import org.openjdk.jmc.flightrecorder.ui.UiStreamModel;
 import org.openjdk.jmc.flightrecorder.ui.common.AbstractDataPage;
 import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
 import org.openjdk.jmc.flightrecorder.ui.common.LabeledPageFactory;
@@ -146,7 +146,7 @@ public class MetadataPage extends AbstractDataPage {
 	private ISelection selection;
 	public TreePath[] treeExpansion;
 
-	public MetadataPage(IPageDefinition dpd, StreamModel items, IPageContainer editor) {
+	public MetadataPage(IPageDefinition dpd, UiStreamModel items, IPageContainer editor) {
 		super(dpd, items, editor);
 	}
 
@@ -238,7 +238,7 @@ public class MetadataPage extends AbstractDataPage {
 		}
 
 		@Override
-		public IDisplayablePage createPage(IPageDefinition dpd, StreamModel items, IPageContainer editor) {
+		public IDisplayablePage createPage(IPageDefinition dpd, UiStreamModel items, IPageContainer editor) {
 			return new MetadataPage(dpd, items, editor);
 		}
 

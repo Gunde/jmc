@@ -30,7 +30,7 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.openjdk.jmc.flightrecorder.ui;
+package org.openjdk.jmc.flightrecorder;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ import org.openjdk.jmc.common.item.IMemberAccessor;
 import org.openjdk.jmc.common.item.IType;
 import org.openjdk.jmc.common.item.ItemFilters;
 import org.openjdk.jmc.common.item.ItemToolkit;
-import org.openjdk.jmc.flightrecorder.ui.messages.internal.Messages;
+import org.openjdk.jmc.flightrecorder.messages.internal.Messages;
 
 /**
  * Toolkit class for working with IItemCollection instances
@@ -141,7 +141,7 @@ public class ItemCollectionToolkit {
 			return itemCountByType.entrySet().stream().map(e -> e.getValue() + " " + e.getKey().getName()).sorted() //$NON-NLS-1$
 					.collect(Collectors.joining(", ")); //$NON-NLS-1$
 		}
-		return MessageFormat.format(Messages.ITEM_COLLECTION_DESC,
+		return MessageFormat.format(Messages.getString(Messages.ITEM_COLLECTION_DESC),
 				itemCountByType.values().stream().mapToLong(Long::longValue).sum(), itemCountByType.size());
 	}
 

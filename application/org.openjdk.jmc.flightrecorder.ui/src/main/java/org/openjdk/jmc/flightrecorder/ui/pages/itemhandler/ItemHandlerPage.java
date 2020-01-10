@@ -80,15 +80,16 @@ import org.openjdk.jmc.common.unit.KindOfQuantity;
 import org.openjdk.jmc.common.unit.LinearKindOfQuantity;
 import org.openjdk.jmc.common.unit.UnitLookup;
 import org.openjdk.jmc.common.util.StateToolkit;
+import org.openjdk.jmc.flightrecorder.ItemCollectionToolkit;
+import org.openjdk.jmc.flightrecorder.StreamModel;
 import org.openjdk.jmc.flightrecorder.rules.Result;
 import org.openjdk.jmc.flightrecorder.ui.FlightRecorderUI;
 import org.openjdk.jmc.flightrecorder.ui.IDisplayablePage;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
 import org.openjdk.jmc.flightrecorder.ui.IPageDefinition;
 import org.openjdk.jmc.flightrecorder.ui.IPageUI;
-import org.openjdk.jmc.flightrecorder.ui.ItemCollectionToolkit;
 import org.openjdk.jmc.flightrecorder.ui.RulesUiToolkit;
-import org.openjdk.jmc.flightrecorder.ui.StreamModel;
+import org.openjdk.jmc.flightrecorder.ui.UiStreamModel;
 import org.openjdk.jmc.flightrecorder.ui.common.AbstractDataPage;
 import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
 import org.openjdk.jmc.flightrecorder.ui.common.FlavorSelector;
@@ -183,7 +184,7 @@ public class ItemHandlerPage extends AbstractDataPage {
 		}
 
 		@Override
-		public IDisplayablePage createPage(IPageDefinition dpd, StreamModel items, IPageContainer editor) {
+		public IDisplayablePage createPage(IPageDefinition dpd, UiStreamModel items, IPageContainer editor) {
 			return new ItemHandlerPage(dpd, items, editor);
 		}
 	}
@@ -576,7 +577,7 @@ public class ItemHandlerPage extends AbstractDataPage {
 	public IItemFilter itemListFilter;
 	private FlavorSelectorState flavorSelectorState;
 
-	public ItemHandlerPage(IPageDefinition dpd, StreamModel items, IPageContainer editor) {
+	public ItemHandlerPage(IPageDefinition dpd, UiStreamModel items, IPageContainer editor) {
 		super(dpd, items, editor);
 		itemChartRange = editor.getRecordingRange();
 	}

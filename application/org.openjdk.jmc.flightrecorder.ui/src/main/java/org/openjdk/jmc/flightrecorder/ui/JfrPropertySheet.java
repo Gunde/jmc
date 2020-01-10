@@ -90,6 +90,7 @@ import org.openjdk.jmc.common.unit.QuantityRange;
 import org.openjdk.jmc.common.unit.RangeContentType;
 import org.openjdk.jmc.common.unit.UnitLookup;
 import org.openjdk.jmc.common.util.TypeHandling;
+import org.openjdk.jmc.flightrecorder.ItemCollectionToolkit;
 import org.openjdk.jmc.flightrecorder.JfrAttributes;
 import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
 import org.openjdk.jmc.flightrecorder.ui.common.ImageConstants;

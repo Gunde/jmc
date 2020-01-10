@@ -45,7 +45,7 @@ import org.openjdk.jmc.flightrecorder.ui.IDisplayablePage;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
 import org.openjdk.jmc.flightrecorder.ui.IPageDefinition;
 import org.openjdk.jmc.flightrecorder.ui.IPageUI;
-import org.openjdk.jmc.flightrecorder.ui.StreamModel;
+import org.openjdk.jmc.flightrecorder.ui.UiStreamModel;
 import org.openjdk.jmc.flightrecorder.ui.common.AbstractDataPage;
 import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
 
@@ -72,7 +72,7 @@ public class MessagePageFactory implements IDataPageFactory {
 	}
 
 	@Override
-	public IDisplayablePage createPage(IPageDefinition dpd, StreamModel items, IPageContainer editor) {
+	public IDisplayablePage createPage(IPageDefinition dpd, UiStreamModel items, IPageContainer editor) {
 		return new AbstractDataPage(dpd, items, editor) {
 			@Override
 			public IPageUI display(Composite parent, FormToolkit toolkit, IPageContainer editor, IState state) {

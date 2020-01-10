@@ -62,7 +62,7 @@ import org.openjdk.jmc.flightrecorder.ui.IDisplayablePage;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
 import org.openjdk.jmc.flightrecorder.ui.IPageDefinition;
 import org.openjdk.jmc.flightrecorder.ui.IPageUI;
-import org.openjdk.jmc.flightrecorder.ui.StreamModel;
+import org.openjdk.jmc.flightrecorder.ui.UiStreamModel;
 import org.openjdk.jmc.flightrecorder.ui.common.AbstractDataPage;
 import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
 import org.openjdk.jmc.flightrecorder.ui.common.FilterComponent;
@@ -101,7 +101,7 @@ public class RecordingPage extends AbstractDataPage {
 		}
 
 		@Override
-		public IDisplayablePage createPage(IPageDefinition dpd, StreamModel items, IPageContainer editor) {
+		public IDisplayablePage createPage(IPageDefinition dpd, UiStreamModel items, IPageContainer editor) {
 			return new RecordingPage(dpd, items, editor);
 		}
 	}
@@ -287,7 +287,7 @@ public class RecordingPage extends AbstractDataPage {
 	private SelectionState settingsTableSelection;
 	private IRange<IQuantity> timelineRange;
 
-	public RecordingPage(IPageDefinition dpd, StreamModel items, IPageContainer editor) {
+	public RecordingPage(IPageDefinition dpd, UiStreamModel items, IPageContainer editor) {
 		super(dpd, items, editor);
 		timelineRange = editor.getRecordingRange();
 	}

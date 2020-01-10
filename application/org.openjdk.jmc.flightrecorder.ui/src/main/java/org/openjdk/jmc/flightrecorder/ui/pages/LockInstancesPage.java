@@ -63,7 +63,7 @@ import org.openjdk.jmc.flightrecorder.ui.IDisplayablePage;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
 import org.openjdk.jmc.flightrecorder.ui.IPageDefinition;
 import org.openjdk.jmc.flightrecorder.ui.IPageUI;
-import org.openjdk.jmc.flightrecorder.ui.StreamModel;
+import org.openjdk.jmc.flightrecorder.ui.UiStreamModel;
 import org.openjdk.jmc.flightrecorder.ui.common.AbstractDataPage;
 import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
 import org.openjdk.jmc.flightrecorder.ui.common.FilterComponent;
@@ -111,7 +111,7 @@ public class LockInstancesPage extends AbstractDataPage {
 		}
 
 		@Override
-		public IDisplayablePage createPage(IPageDefinition dpd, StreamModel items, IPageContainer editor) {
+		public IDisplayablePage createPage(IPageDefinition dpd, UiStreamModel items, IPageContainer editor) {
 			return new LockInstancesPage(dpd, items, editor);
 		}
 
@@ -305,7 +305,7 @@ public class LockInstancesPage extends AbstractDataPage {
 		return TABLE_ITEMS;
 	}
 
-	public LockInstancesPage(IPageDefinition dpd, StreamModel items, IPageContainer editor) {
+	public LockInstancesPage(IPageDefinition dpd, UiStreamModel items, IPageContainer editor) {
 		super(dpd, items, editor);
 	}
 

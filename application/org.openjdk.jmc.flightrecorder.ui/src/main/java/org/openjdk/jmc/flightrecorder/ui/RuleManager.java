@@ -59,6 +59,7 @@ import org.xml.sax.SAXException;
 
 import org.openjdk.jmc.common.IState;
 import org.openjdk.jmc.common.util.StateToolkit;
+import org.openjdk.jmc.flightrecorder.StreamModel;
 import org.openjdk.jmc.flightrecorder.rules.IRule;
 import org.openjdk.jmc.flightrecorder.rules.Result;
 import org.openjdk.jmc.flightrecorder.rules.RuleRegistry;

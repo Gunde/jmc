@@ -54,8 +54,8 @@ import org.openjdk.jmc.common.item.IMemberAccessor;
 import org.openjdk.jmc.common.item.ItemToolkit;
 import org.openjdk.jmc.common.unit.IQuantity;
 import org.openjdk.jmc.common.unit.UnitLookup;
-import org.openjdk.jmc.flightrecorder.ui.ItemCollectionToolkit;
-import org.openjdk.jmc.flightrecorder.ui.ItemIterableToolkit;
+import org.openjdk.jmc.flightrecorder.ItemCollectionToolkit;
+import org.openjdk.jmc.flightrecorder.ItemIterableToolkit;
 
 public class AggregationGrid {
 

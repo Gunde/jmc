@@ -67,7 +67,7 @@ import org.openjdk.jmc.flightrecorder.ui.IDisplayablePage;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
 import org.openjdk.jmc.flightrecorder.ui.IPageDefinition;
 import org.openjdk.jmc.flightrecorder.ui.IPageUI;
-import org.openjdk.jmc.flightrecorder.ui.StreamModel;
+import org.openjdk.jmc.flightrecorder.ui.UiStreamModel;
 import org.openjdk.jmc.flightrecorder.ui.common.AbstractDataPage;
 import org.openjdk.jmc.flightrecorder.ui.common.FlavorSelector.FlavorSelectorState;
 import org.openjdk.jmc.flightrecorder.ui.common.ImageConstants;
@@ -106,7 +106,7 @@ public class ThreadsPage extends AbstractDataPage {
 		}
 
 		@Override
-		public IDisplayablePage createPage(IPageDefinition definition, StreamModel items, IPageContainer editor) {
+		public IDisplayablePage createPage(IPageDefinition definition, UiStreamModel items, IPageContainer editor) {
 			return new ThreadsPage(definition, items, editor);
 		}
 
@@ -353,7 +353,7 @@ public class ThreadsPage extends AbstractDataPage {
 	private IItemFilter tableFilter;
 	private IRange<IQuantity> visibleRange;
 
-	public ThreadsPage(IPageDefinition definition, StreamModel model, IPageContainer editor) {
+	public ThreadsPage(IPageDefinition definition, UiStreamModel model, IPageContainer editor) {
 		super(definition, model, editor);
 		visibleRange = editor.getRecordingRange();
 	}

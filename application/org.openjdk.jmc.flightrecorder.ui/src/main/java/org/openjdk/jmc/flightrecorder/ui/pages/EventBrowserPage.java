@@ -69,6 +69,7 @@ import org.openjdk.jmc.common.unit.IQuantity;
 import org.openjdk.jmc.common.unit.IRange;
 import org.openjdk.jmc.common.unit.LinearKindOfQuantity;
 import org.openjdk.jmc.common.util.StateToolkit;
+import org.openjdk.jmc.flightrecorder.ItemCollectionToolkit;
 import org.openjdk.jmc.flightrecorder.JfrAttributes;
 import org.openjdk.jmc.flightrecorder.ui.EventTypeFolderNode.EventTypeNode;
 import org.openjdk.jmc.flightrecorder.ui.FlightRecorderUI;
@@ -77,9 +78,8 @@ import org.openjdk.jmc.flightrecorder.ui.IDisplayablePage;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
 import org.openjdk.jmc.flightrecorder.ui.IPageDefinition;
 import org.openjdk.jmc.flightrecorder.ui.IPageUI;
-import org.openjdk.jmc.flightrecorder.ui.ItemCollectionToolkit;
 import org.openjdk.jmc.flightrecorder.ui.RuleManager;
-import org.openjdk.jmc.flightrecorder.ui.StreamModel;
+import org.openjdk.jmc.flightrecorder.ui.UiStreamModel;
 import org.openjdk.jmc.flightrecorder.ui.common.AbstractDataPage;
 import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
 import org.openjdk.jmc.flightrecorder.ui.common.FilterComponent;
@@ -127,7 +127,7 @@ public class EventBrowserPage extends AbstractDataPage {
 		}
 
 		@Override
-		public IDisplayablePage createPage(IPageDefinition dpd, StreamModel items, IPageContainer editor) {
+		public IDisplayablePage createPage(IPageDefinition dpd, UiStreamModel items, IPageContainer editor) {
 			return new EventBrowserPage(dpd, items, editor);
 		}
 
@@ -150,7 +150,7 @@ public class EventBrowserPage extends AbstractDataPage {
 	private IItemFilter flagsFilter;
 //	public int topIndex;
 
-	public EventBrowserPage(IPageDefinition definition, StreamModel items, IPageContainer editor) {
+	public EventBrowserPage(IPageDefinition definition, UiStreamModel items, IPageContainer editor) {
 		super(definition, items, editor);
 	}
 

@@ -75,6 +75,7 @@ import org.openjdk.jmc.common.unit.IRange;
 import org.openjdk.jmc.common.unit.UnitLookup;
 import org.openjdk.jmc.common.version.JavaVersion;
 import org.openjdk.jmc.common.version.JavaVersionSupport;
+import org.openjdk.jmc.flightrecorder.ItemCollectionToolkit;
 import org.openjdk.jmc.flightrecorder.JfrAttributes;
 import org.openjdk.jmc.flightrecorder.jdk.JdkAggregators;
 import org.openjdk.jmc.flightrecorder.jdk.JdkAttributes;
@@ -88,8 +89,7 @@ import org.openjdk.jmc.flightrecorder.ui.IDisplayablePage;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
 import org.openjdk.jmc.flightrecorder.ui.IPageDefinition;
 import org.openjdk.jmc.flightrecorder.ui.IPageUI;
-import org.openjdk.jmc.flightrecorder.ui.ItemCollectionToolkit;
-import org.openjdk.jmc.flightrecorder.ui.StreamModel;
+import org.openjdk.jmc.flightrecorder.ui.UiStreamModel;
 import org.openjdk.jmc.flightrecorder.ui.common.AbstractDataPage;
 import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
 import org.openjdk.jmc.flightrecorder.ui.common.FilterComponent;
@@ -136,7 +136,7 @@ public class CodeCachePage extends AbstractDataPage {
 		}
 
 		@Override
-		public IDisplayablePage createPage(IPageDefinition definition, StreamModel items, IPageContainer editor) {
+		public IDisplayablePage createPage(IPageDefinition definition, UiStreamModel items, IPageContainer editor) {
 			return new CodeCachePage(definition, items, editor);
 		}
 
@@ -445,7 +445,7 @@ public class CodeCachePage extends AbstractDataPage {
 	private IRange<IQuantity> timelineRange;
 	private FlavorSelectorState flavorSelectorState;
 
-	public CodeCachePage(IPageDefinition defintion, StreamModel items, IPageContainer editor) {
+	public CodeCachePage(IPageDefinition defintion, UiStreamModel items, IPageContainer editor) {
 		super(defintion, items, editor);
 		timelineRange = editor.getRecordingRange();
 	}

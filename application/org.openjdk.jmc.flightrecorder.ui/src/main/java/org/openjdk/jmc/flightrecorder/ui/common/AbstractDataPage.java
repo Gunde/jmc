@@ -45,14 +45,14 @@ import org.openjdk.jmc.flightrecorder.ui.FlightRecorderUI;
 import org.openjdk.jmc.flightrecorder.ui.IDisplayablePage;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
 import org.openjdk.jmc.flightrecorder.ui.IPageDefinition;
-import org.openjdk.jmc.flightrecorder.ui.StreamModel;
+import org.openjdk.jmc.flightrecorder.ui.UiStreamModel;
 import org.openjdk.jmc.flightrecorder.ui.messages.internal.Messages;
 import org.openjdk.jmc.ui.misc.OverlayImageDescriptor;
 
 public abstract class AbstractDataPage implements IDisplayablePage {
 
 	private final IPageDefinition definition;
-	private final StreamModel model;
+	private final UiStreamModel model;
 	private final IPageContainer editor;
 
 	@Override
@@ -114,7 +114,7 @@ public abstract class AbstractDataPage implements IDisplayablePage {
 		return definition.getDescription();
 	}
 
-	protected StreamModel getDataSource() {
+	protected UiStreamModel getDataSource() {
 		return model;
 	}
 
@@ -136,7 +136,7 @@ public abstract class AbstractDataPage implements IDisplayablePage {
 		addResultConfigurationAction(form, config);
 	}
 
-	public AbstractDataPage(IPageDefinition definition, StreamModel model, IPageContainer editor) {
+	public AbstractDataPage(IPageDefinition definition, UiStreamModel model, IPageContainer editor) {
 		this.definition = definition;
 		this.model = model;
 		this.editor = editor;

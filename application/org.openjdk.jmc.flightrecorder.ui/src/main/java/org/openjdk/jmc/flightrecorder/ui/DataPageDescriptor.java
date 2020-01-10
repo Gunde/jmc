@@ -133,7 +133,7 @@ public class DataPageDescriptor implements IPageDefinition {
 		pageState = StatefulState.create(page);
 	}
 
-	IDisplayablePage createPage(StreamModel items, IPageContainer editor) {
+	IDisplayablePage createPage(UiStreamModel items, IPageContainer editor) {
 		return factory.createPage(this, items, editor);
 	}
 

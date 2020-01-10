@@ -69,6 +69,6 @@ public interface IDataPageFactory {
 
 	}
 
-	IDisplayablePage createPage(IPageDefinition definition, StreamModel items, IPageContainer editor);
+	IDisplayablePage createPage(IPageDefinition definition, UiStreamModel items, IPageContainer editor);
 
 }

@@ -30,15 +30,12 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.openjdk.jmc.flightrecorder.ui;
+package org.openjdk.jmc.flightrecorder;
 
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.openjdk.jmc.common.item.IItem;
@@ -50,15 +47,13 @@ import org.openjdk.jmc.common.item.IType;
 import org.openjdk.jmc.common.unit.IQuantity;
 import org.openjdk.jmc.common.unit.IRange;
 import org.openjdk.jmc.common.util.PredicateToolkit;
-import org.openjdk.jmc.flightrecorder.JfrAttributes;
 import org.openjdk.jmc.flightrecorder.internal.EventArray;
-import org.openjdk.jmc.flightrecorder.ui.EventTypeFolderNode.TypeWithCategory;
 
 public class StreamModel {
 
-	private final EventArray[] eventsByType;
+	protected final EventArray[] eventsByType;
 
-	StreamModel(EventArray[] eventsByType) {
+	public StreamModel(EventArray[] eventsByType) {
 		this.eventsByType = eventsByType;
 	}
 
@@ -84,6 +79,11 @@ public class StreamModel {
 
 	public IItemCollection getItems() {
 		return ItemCollectionToolkit.build(() -> Arrays.stream(eventsByType)
+				.map(ea -> ItemIterableToolkit.build(() -> Arrays.stream(ea.getEvents()), ea.getType())));
+	}
+	
+	public static IItemCollection build(EventArray[] events) {
+		return ItemCollectionToolkit.build(() -> Arrays.stream(events)
 				.map(ea -> ItemIterableToolkit.build(() -> Arrays.stream(ea.getEvents()), ea.getType())));
 	}
 
@@ -140,20 +140,5 @@ public class StreamModel {
 			}
 		}
 		return low;
-	}
-
-	public EventTypeFolderNode getTypeTree(Stream<IItemIterable> items) {
-		Map<IType<IItem>, Long> itemCountByType = items
-				.collect(Collectors.toMap(IItemIterable::getType, is -> is.getItemCount(), Long::sum));
-		Function<EventArray, TypeWithCategory> eventArrayToTypeWithCategoryMapper = ea -> {
-			Long count = itemCountByType.remove(ea.getType());
-			return count == null ? null : new TypeWithCategory(ea.getType(), ea.getTypeCategory(), count);
-		};
-		return EventTypeFolderNode
-				.buildRoot(Stream.of(eventsByType).map(eventArrayToTypeWithCategoryMapper).filter(Objects::nonNull));
-	}
-
-	public EventTypeFolderNode getTypeTree() {
-		return getTypeTree(ItemCollectionToolkit.stream(getItems()));
 	}
 }
