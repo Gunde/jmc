@@ -67,13 +67,10 @@ import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.forms.widgets.FormText;
 
 import org.openjdk.jmc.common.IDescribable;
-import org.openjdk.jmc.common.IPredicate;
 import org.openjdk.jmc.common.IState;
 import org.openjdk.jmc.common.IStateful;
 import org.openjdk.jmc.common.IWritableState;
-import org.openjdk.jmc.common.item.IItem;
 import org.openjdk.jmc.common.item.IItemFilter;
-import org.openjdk.jmc.common.item.IType;
 import org.openjdk.jmc.common.item.ItemFilters;
 import org.openjdk.jmc.common.item.ItemFilters.Types;
 import org.openjdk.jmc.common.item.PersistableItemFilter;
@@ -93,14 +90,11 @@ import org.openjdk.jmc.ui.wizards.OnePageWizardDialog;
 
 public class LaneEditor {
 
-	private static final IItemFilter TYPE_HAS_THREAD_AND_DURATION = new IItemFilter() {
-		@Override
-		public IPredicate<IItem> getPredicate(IType<IItem> type) {
-			if (DataPageToolkit.isTypeWithThreadAndDuration(type)) {
-				return PredicateToolkit.truePredicate();
-			}
-			return PredicateToolkit.falsePredicate();
+	private static final IItemFilter TYPE_HAS_THREAD_AND_DURATION = type -> {
+		if (DataPageToolkit.isTypeWithThreadAndDuration(type)) {
+			return PredicateToolkit.truePredicate();
 		}
+		return PredicateToolkit.falsePredicate();
 	};
 
 	private static class EditLanesWizardPage extends WizardPage implements IPerformFinishable {

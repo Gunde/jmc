@@ -36,8 +36,8 @@ import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.function.Predicate;
 
-import org.openjdk.jmc.common.IPredicate;
 import org.openjdk.jmc.common.messages.internal.Messages;
 import org.openjdk.jmc.common.unit.ContentType;
 import org.openjdk.jmc.common.unit.IQuantity;
@@ -436,17 +436,17 @@ public class Aggregators {
 
 	private static class FilterConsumer<C extends IItemConsumer<C>> implements IItemConsumer<FilterConsumer<C>> {
 
-		private final IPredicate<IItem> p;
+		private final Predicate<IItem> p;
 		private final C nestedConsumer;
 
-		public FilterConsumer(IPredicate<IItem> p, C nestedConsumer) {
+		public FilterConsumer(Predicate<IItem> p, C nestedConsumer) {
 			this.p = p;
 			this.nestedConsumer = nestedConsumer;
 		}
 
 		@Override
 		public void consume(IItem item) {
-			if (p.evaluate(item)) {
+			if (p.test(item)) {
 				nestedConsumer.consume(item);
 			}
 		}
@@ -1092,12 +1092,12 @@ public class Aggregators {
 	}
 
 	public static <C extends IItemConsumer<C>> IAggregator<C, C> forConsumer(
-		final IItemConsumerFactory<C> consumerFactory, final IPredicate<IType<IItem>> acceptType) {
+		final IItemConsumerFactory<C> consumerFactory, final Predicate<IType<IItem>> acceptType) {
 		return new MergingAggregator<C, C>("", null, UnitLookup.UNKNOWN) { //$NON-NLS-1$
 
 			@Override
 			public boolean acceptType(IType<IItem> type) {
-				return acceptType.evaluate(type);
+				return acceptType.test(type);
 			}
 
 			@Override

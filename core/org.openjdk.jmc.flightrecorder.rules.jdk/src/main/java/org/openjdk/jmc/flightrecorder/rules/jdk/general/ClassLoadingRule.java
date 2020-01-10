@@ -92,8 +92,8 @@ public class ClassLoadingRule implements IRule {
 		IQuantity endTime = events.getAggregate(JdkAggregators.LAST_ITEM_END);
 		if (startTime != null && endTime != null) {
 			IQuantity totalTime = endTime.subtract(startTime);
-			IAggregator<IQuantity, ?> max2 = Aggregators.max(JfrAttributes.DURATION);
-			IQuantity max = events.getAggregate(max2);
+			IAggregator<IQuantity, ?> maxDurationAggregator = Aggregators.max(JfrAttributes.DURATION);
+			IQuantity max = events.getAggregate(maxDurationAggregator);
 			IQuantity sum = events.getAggregate(Aggregators.sum(JfrAttributes.DURATION));
 			// FIXME: Consider using a score function instead of set value.
 			if ((max.compareTo(maxDurationLimit) > 0) || (sum.ratioTo(totalTime) > ratioOfTotalLimit.doubleValue())) {
