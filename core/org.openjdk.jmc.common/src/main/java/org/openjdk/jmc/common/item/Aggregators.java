@@ -1019,7 +1019,8 @@ public class Aggregators {
 
 	public static IAggregator<String, ?> distinctAsString(
 		IAttribute<String> attribute, final String delimiter, String name, String description) {
-		return Aggregators.valueBuilderAggregator(Aggregators.distinct(attribute),
+		IAggregator<Set<String>, ?> distinct = Aggregators.distinct(attribute);
+		return Aggregators.valueBuilderAggregator(distinct,
 				new IValueBuilder<String, Set<String>>() {
 
 					@Override
