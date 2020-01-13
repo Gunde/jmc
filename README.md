@@ -12,7 +12,7 @@ For more information on Mission Control, see http://www.oracle.com/missioncontro
 
 * Core API can *read* recordings from JDK 7 and above
 
-* Core API can *run* on JDK 7 and above
+* Core API can *run* on JDK 8 and above
 
 * Core API contains a framework for handling units of measurement and physical quantities
 
@@ -103,7 +103,7 @@ public class RunRulesOnFileSimple {
 ```
 
 
-Example for programmatically running rules in parallel (requires JDK8):
+Example for programmatically running rules in parallel:
 
 ```java
 import java.io.File;
