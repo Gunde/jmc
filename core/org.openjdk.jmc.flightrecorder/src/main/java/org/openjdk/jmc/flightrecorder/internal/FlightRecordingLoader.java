@@ -66,11 +66,20 @@ public final class FlightRecordingLoader {
 
 	private static final Logger LOGGER = Logger.getLogger(FlightRecordingLoader.class.getName());
 	private static final String SINGLE_THREADED_PARSER_PROPERTY_KEY = "org.openjdk.jmc.flightrecorder.parser.singlethreaded"; //$NON-NLS-1$
+	private static final ExecutorService THREAD_POOL;
 	private static final int MIN_MEMORY_PER_THREAD = 300 * 1024 * 1024; // Unless the chunks are very big, 300MB of available memory per parallel chunk load should be plenty
 	private static final short VERSION_0 = 0; // JDK7 & JDK8
 	private static final short VERSION_1 = 1; // JDK9 & JDK10
 	private static final short VERSION_2 = 2; // JDK11
 	private static final byte[] FLIGHT_RECORDER_MAGIC = {'F', 'L', 'R', '\0'};
+
+	static {
+		if (Boolean.getBoolean(SINGLE_THREADED_PARSER_PROPERTY_KEY)) {
+			THREAD_POOL = Executors.newSingleThreadExecutor();
+		} else {
+			THREAD_POOL = Executors.newCachedThreadPool();
+		}
+	}
 
 	public static EventArray[] loadStream(InputStream stream, boolean hideExperimentals, boolean ignoreTruncatedChunk)
 			throws CouldNotLoadRecordingException, IOException {
@@ -201,16 +210,9 @@ public final class FlightRecordingLoader {
 		long maxBuffersCount = Math.min(Math.max(availableMemory / MIN_MEMORY_PER_THREAD, 1),
 				rt.availableProcessors() - 1);
 
-		ExecutorService threadPool;
-		if (Boolean.getBoolean(SINGLE_THREADED_PARSER_PROPERTY_KEY)) {
-			threadPool = Executors.newSingleThreadExecutor();
-		} else {
-			threadPool = Executors.newCachedThreadPool();
-		}
-
 		int chunkCount = 0;
 		try {
-			ExecutorCompletionService<byte[]> service = new ExecutorCompletionService<>(threadPool);
+			ExecutorCompletionService<byte[]> service = new ExecutorCompletionService<>(THREAD_POOL);
 			byte[] buffer = new byte[0];
 			int outstanding = 0;
 			Set<Long> loadedChunkTimestamps = new HashSet<>();
@@ -262,8 +264,6 @@ public final class FlightRecordingLoader {
 			} else {
 				throw new CouldNotLoadRecordingException(cause);
 			}
-		} finally {
-			threadPool.shutdownNow();
 		}
 		LOGGER.fine("Loaded JFR with " + chunkCount + " chunks"); //$NON-NLS-1$ //$NON-NLS-2$
 		return context.buildEventArrays();
