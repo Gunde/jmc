@@ -170,7 +170,7 @@ public class RecordingLoader extends Job {
 			try (InputStream stream = IOToolkit.openUncompressedStream(file)) {
 				boolean hideExperimentals = !FlightRecorderUI.getDefault().includeExperimentalEventsAndFields();
 				boolean ignoreTruncatedChunk = FlightRecorderUI.getDefault().allowIncompleteRecordingFile();
-				return FlightRecordingLoader.loadStream(stream, hideExperimentals, ignoreTruncatedChunk);
+				return FlightRecordingLoader.loadStream(stream, hideExperimentals, ignoreTruncatedChunk, 0);
 			} catch (NotEnoughMemoryException | OutOfMemoryError e) {
 				// Try to load part of the file
 			}
@@ -222,11 +222,11 @@ public class RecordingLoader extends Job {
 						lm.setWorkSize(toLoad.size());
 						return FlightRecordingLoader.readChunks(lm,
 								FlightRecordingLoader.createChunkSupplier(raf, toLoad), hideExperimentals,
-								ignoreTruncatedChunk);
+								ignoreTruncatedChunk, 0);
 					} else {
 						lm.setWorkSize(allChunks.size());
 						return FlightRecordingLoader.readChunks(lm, FlightRecordingLoader.createChunkSupplier(raf),
-								hideExperimentals, ignoreTruncatedChunk);
+								hideExperimentals, ignoreTruncatedChunk, 0);
 					}
 				} catch (NotEnoughMemoryException nem) {
 					// Try again with lower loadQuota

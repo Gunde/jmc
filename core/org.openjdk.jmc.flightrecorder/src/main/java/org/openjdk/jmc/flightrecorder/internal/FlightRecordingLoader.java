@@ -72,10 +72,11 @@ public final class FlightRecordingLoader {
 	private static final short VERSION_2 = 2; // JDK11
 	private static final byte[] FLIGHT_RECORDER_MAGIC = {'F', 'L', 'R', '\0'};
 
-	public static EventArrays loadStream(InputStream stream, boolean hideExperimentals, boolean ignoreTruncatedChunk)
+	public static EventArrays loadStream(
+		InputStream stream, boolean hideExperimentals, boolean ignoreTruncatedChunk, int pipelines)
 			throws CouldNotLoadRecordingException, IOException {
 		return loadStream(stream, ParserExtensionRegistry.getParserExtensions(), hideExperimentals,
-				ignoreTruncatedChunk);
+				ignoreTruncatedChunk, pipelines);
 	}
 
 	/**
@@ -92,8 +93,9 @@ public final class FlightRecordingLoader {
 	 */
 	public static EventArrays loadStream(
 		InputStream stream, List<? extends IParserExtension> extensions, boolean hideExperimentals,
-		boolean ignoreTruncatedChunk) throws CouldNotLoadRecordingException, IOException {
-		return readChunks(null, extensions, createChunkSupplier(stream), hideExperimentals, ignoreTruncatedChunk);
+		boolean ignoreTruncatedChunk, int pipelines) throws CouldNotLoadRecordingException, IOException {
+		return readChunks(null, extensions, createChunkSupplier(stream), hideExperimentals, ignoreTruncatedChunk,
+				pipelines);
 	}
 
 	public static IChunkSupplier createChunkSupplier(final InputStream input)
@@ -186,16 +188,17 @@ public final class FlightRecordingLoader {
 	}
 
 	public static EventArrays readChunks(
-		Runnable monitor, IChunkSupplier chunkSupplier, boolean hideExperimentals, boolean ignoreTruncatedChunk)
-			throws CouldNotLoadRecordingException, IOException {
+		Runnable monitor, IChunkSupplier chunkSupplier, boolean hideExperimentals, boolean ignoreTruncatedChunk,
+		int pipelines) throws CouldNotLoadRecordingException, IOException {
 		return readChunks(monitor, ParserExtensionRegistry.getParserExtensions(), chunkSupplier, hideExperimentals,
-				ignoreTruncatedChunk);
+				ignoreTruncatedChunk, pipelines);
 	}
 
 	public static EventArrays readChunks(
 		Runnable monitor, List<? extends IParserExtension> extensions, IChunkSupplier chunkSupplier,
-		boolean hideExperimentals, boolean ignoreTruncatedChunk) throws CouldNotLoadRecordingException, IOException {
-		LoaderContext context = new LoaderContext(extensions, hideExperimentals);
+		boolean hideExperimentals, boolean ignoreTruncatedChunk, int pipelines)
+			throws CouldNotLoadRecordingException, IOException {
+		LoaderContext context = new LoaderContext(extensions, hideExperimentals, pipelines);
 		Runtime rt = Runtime.getRuntime();
 		long availableMemory = rt.maxMemory() - rt.totalMemory() + rt.freeMemory();
 		long maxBuffersCount = Math.min(Math.max(availableMemory / MIN_MEMORY_PER_THREAD, 1),

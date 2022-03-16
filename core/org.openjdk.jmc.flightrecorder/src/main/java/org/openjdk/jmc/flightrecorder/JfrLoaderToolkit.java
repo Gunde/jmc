@@ -62,12 +62,24 @@ public class JfrLoaderToolkit {
 	 */
 	private static EventArrays loadFile(List<File> files, List<? extends IParserExtension> extensions)
 			throws IOException, CouldNotLoadRecordingException {
+		return loadFile(files, extensions, 0);
+	}
+
+	/**
+	 * @param files
+	 *            the files to read the recording from
+	 * @param extensions
+	 *            the extensions to use when parsing the file
+	 * @return an object holding an array of EventArrays (one event type per EventArray)
+	 */
+	private static EventArrays loadFile(List<File> files, List<? extends IParserExtension> extensions, int pipelines)
+			throws IOException, CouldNotLoadRecordingException {
 		List<InputStream> streams = new ArrayList<>(files.size());
 		for (File file : files) {
 			streams.add(IOToolkit.openUncompressedStream(file));
 		}
 		try (InputStream stream = new SequenceInputStream(Collections.enumeration(streams))) {
-			return FlightRecordingLoader.loadStream(stream, extensions, false, true);
+			return FlightRecordingLoader.loadStream(stream, extensions, false, true, pipelines);
 		}
 	}
 
@@ -95,8 +107,24 @@ public class JfrLoaderToolkit {
 	 */
 	public static IItemCollection loadEvents(InputStream stream, List<? extends IParserExtension> extensions)
 			throws CouldNotLoadRecordingException, IOException {
+		return loadEvents(stream, extensions, 0);
+	}
+
+	/**
+	 * Loads a potentially zipped or gzipped input stream using the parser extensions loaded from
+	 * the java service loader
+	 *
+	 * @param stream
+	 *            the input stream to read the recording from
+	 * @param extensions
+	 *            the extensions to use when parsing the file
+	 * @return the events in the recording
+	 */
+	public static IItemCollection loadEvents(
+		InputStream stream, List<? extends IParserExtension> extensions, int pipelines)
+			throws CouldNotLoadRecordingException, IOException {
 		try (InputStream in = IOToolkit.openUncompressedStream(stream)) {
-			return EventCollection.build(FlightRecordingLoader.loadStream(in, extensions, false, true));
+			return EventCollection.build(FlightRecordingLoader.loadStream(in, extensions, false, true, pipelines));
 		}
 	}
 
@@ -115,6 +143,21 @@ public class JfrLoaderToolkit {
 	}
 
 	/**
+	 * Loads a potentially zipped or gzipped file using the parser extensions loaded from the java
+	 * service loader
+	 *
+	 * @param file
+	 *            the file to read the recording from
+	 * @return the events in the recording
+	 */
+	public static IItemCollection loadEvents(File file, int pipelines)
+			throws IOException, CouldNotLoadRecordingException {
+		List<File> files = new ArrayList<>();
+		files.add(file);
+		return loadEvents(files, pipelines);
+	}
+
+	/**
 	 * Loads a recording from a sequence of potentially zipped or gzipped files using the parser
 	 * extensions loaded from the java service loader
 	 *
@@ -124,6 +167,19 @@ public class JfrLoaderToolkit {
 	 */
 	public static IItemCollection loadEvents(List<File> files) throws IOException, CouldNotLoadRecordingException {
 		return loadEvents(files, ParserExtensionRegistry.getParserExtensions());
+	}
+
+	/**
+	 * Loads a recording from a sequence of potentially zipped or gzipped files using the parser
+	 * extensions loaded from the java service loader
+	 *
+	 * @param files
+	 *            the files to read the recording from
+	 * @return the events in the recording
+	 */
+	public static IItemCollection loadEvents(List<File> files, int pipelines)
+			throws IOException, CouldNotLoadRecordingException {
+		return loadEvents(files, ParserExtensionRegistry.getParserExtensions(), pipelines);
 	}
 
 	/**
@@ -139,6 +195,22 @@ public class JfrLoaderToolkit {
 	public static IItemCollection loadEvents(List<File> files, List<? extends IParserExtension> extensions)
 			throws IOException, CouldNotLoadRecordingException {
 		return EventCollection.build(loadFile(files, extensions));
+	}
+
+	/**
+	 * Loads a recording from a sequence of potentially zipped or gzipped file using the supplied
+	 * parser extensions
+	 *
+	 * @param files
+	 *            the files to read the recording from
+	 * @param extensions
+	 *            the extensions to use when parsing the file
+	 * @return the events in the recording
+	 */
+	public static IItemCollection loadEvents(
+		List<File> files, List<? extends IParserExtension> extensions, int pipelines)
+			throws IOException, CouldNotLoadRecordingException {
+		return EventCollection.build(loadFile(files, extensions, pipelines));
 	}
 
 }

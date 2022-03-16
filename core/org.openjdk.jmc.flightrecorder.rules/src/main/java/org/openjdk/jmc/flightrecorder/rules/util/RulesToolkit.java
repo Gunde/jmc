@@ -226,28 +226,32 @@ public class RulesToolkit {
 	 *         in mebibytes/second
 	 */
 	public static double leastSquareMemory(
-		Iterator<? extends IItem> items, IMemberAccessor<IQuantity, IItem> timeField,
-		IMemberAccessor<IQuantity, IItem> memField) {
+		IItemCollection items, IAttribute<IQuantity> timeField, IAttribute<IQuantity> memField) {
+		IAggregator<IQuantity, ?> min = Aggregators.min(JfrAttributes.START_TIME);
+		IQuantity earliestStartTime = items.getAggregate(min);
 		double sumX = 0;
 		double sumY = 0;
 		double sumX2 = 0;
 		double sumXY = 0;
 		double num = 0;
-		double startTime = 0;
+		double startTime = earliestStartTime.clampedLongValueIn(UnitLookup.EPOCH_S);
 
-		while (items.hasNext()) {
-			IItem item = items.next();
-			long time = timeField.getMember(item).clampedLongValueIn(UnitLookup.EPOCH_S);
-			long mem = memField.getMember(item).clampedLongValueIn(MEBIBYTES);
-			if (num == 0) {
-				startTime = time;
+		for (IItemIterable itemIterable : items) {
+			IMemberAccessor<IQuantity, IItem> timeAccessor = timeField.getAccessor(itemIterable.getType());
+			IMemberAccessor<IQuantity, IItem> memAccessor = memField.getAccessor(itemIterable.getType());
+			for (IItem item : itemIterable) {
+				long time = timeAccessor.getMember(item).clampedLongValueIn(UnitLookup.EPOCH_S);
+				long mem = memAccessor.getMember(item).clampedLongValueIn(MEBIBYTES);
+				if (num == 0) {
+					startTime = time;
+				}
+				time -= startTime;
+				sumX += time;
+				sumY += mem;
+				sumX2 += time * time;
+				sumXY += time * mem;
+				num++;
 			}
-			time -= startTime;
-			sumX += time;
-			sumY += mem;
-			sumX2 += time * time;
-			sumXY += time * mem;
-			num++;
 		}
 		double value = (num * sumXY - sumX * sumY) / (num * sumX2 - sumX * sumX);
 		return Double.isNaN(value) ? 0 : value;
@@ -1455,30 +1459,7 @@ public class RulesToolkit {
 	 * @return the earliest start time in the provided collection
 	 */
 	public static IQuantity getEarliestStartTime(IItemCollection items) {
-		// JMC-7088: We use this check to disable the optimisation for IItemCollection implementations that don't contain sorted event lanes.
-		if (items.getClass().getName().equals("EventCollection")) { //$NON-NLS-1$
-			IQuantity earliestStartTime = null;
-			for (IItemIterable iItemIterable : items) {
-				IMemberAccessor<IQuantity, IItem> startTimeAccessor = JfrAttributes.START_TIME
-						.getAccessor(iItemIterable.getType());
-				if (iItemIterable.iterator().hasNext()) {
-					IItem next = iItemIterable.iterator().next();
-					if (next != null && startTimeAccessor != null) {
-						IQuantity startTime = startTimeAccessor.getMember(next);
-						if (earliestStartTime == null) {
-							earliestStartTime = startTime;
-						} else {
-							if (earliestStartTime.compareTo(startTime) >= 0) {
-								earliestStartTime = startTime;
-							}
-						}
-					}
-				}
-			}
-			return earliestStartTime;
-		} else {
-			return items.getAggregate(EARLIEST_START_TIME);
-		}
+		return items.getAggregate(EARLIEST_START_TIME);
 	}
 
 	private static final IAggregator<IQuantity, ?> EARLIEST_END_TIME = Aggregators.min(JfrAttributes.END_TIME);
@@ -1492,30 +1473,7 @@ public class RulesToolkit {
 	 * @return the earliest end time in the provided collection
 	 */
 	public static IQuantity getEarliestEndTime(IItemCollection items) {
-		// JMC-7088: We use this check to disable the optimisation for IItemCollection implementations that don't contain sorted event lanes.
-		if (items.getClass().getName().equals("EventCollection")) { //$NON-NLS-1$
-			IQuantity earliestEndTime = null;
-			for (IItemIterable iItemIterable : items) {
-				IMemberAccessor<IQuantity, IItem> endTimeAccessor = JfrAttributes.END_TIME
-						.getAccessor(iItemIterable.getType());
-				if (iItemIterable.iterator().hasNext()) {
-					IItem next = iItemIterable.iterator().next();
-					if (next != null && endTimeAccessor != null) {
-						IQuantity endTime = endTimeAccessor.getMember(next);
-						if (earliestEndTime == null) {
-							earliestEndTime = endTime;
-						} else {
-							if (earliestEndTime.compareTo(endTime) >= 0) {
-								earliestEndTime = endTime;
-							}
-						}
-					}
-				}
-			}
-			return earliestEndTime;
-		} else {
-			return items.getAggregate(EARLIEST_END_TIME);
-		}
+		return items.getAggregate(EARLIEST_END_TIME);
 	}
 
 	private static final IAggregator<IQuantity, ?> LATEST_END_TIME = Aggregators.max(JfrAttributes.END_TIME);

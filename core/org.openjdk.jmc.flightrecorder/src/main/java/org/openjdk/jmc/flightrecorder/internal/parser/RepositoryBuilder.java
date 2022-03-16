@@ -45,6 +45,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.openjdk.jmc.common.collection.SimpleArray;
 import org.openjdk.jmc.common.item.IItem;
@@ -67,20 +68,27 @@ class RepositoryBuilder implements IEventSinkFactory {
 	private static final Logger LOGGER = Logger.getLogger(RepositoryBuilder.class.getName());
 	private final Map<String, EventTypeEntry> eventTypes = new HashMap<>();
 
+	private final int pipelines;
+
+	RepositoryBuilder(int pipelines) {
+		this.pipelines = pipelines;
+	}
+
 	@Override
 	public IEventSink create(
 		String identifier, String label, String[] category, String description, List<ValueField> dataStructure) {
 		synchronized (eventTypes) {
 			EventTypeEntry eventTypeEntry = eventTypes.get(identifier);
 			if (eventTypeEntry == null) {
-				eventTypeEntry = createEventTypeEntry(identifier, label, category, description, dataStructure);
+				eventTypeEntry = createEventTypeEntry(identifier, label, category, description, dataStructure,
+						pipelines);
 				eventTypes.put(identifier, eventTypeEntry);
 				return eventTypeEntry.createSink();
 			} else {
 				while (!eventTypeEntry.isCompatibleWith(dataStructure)) {
 					if (eventTypeEntry.next == null) {
 						eventTypeEntry.next = createEventTypeEntry(identifier + UUID.randomUUID().toString(), label,
-								category, description, dataStructure);
+								category, description, dataStructure, pipelines);
 						LOGGER.log(Level.WARNING, MessageFormat.format(
 								"Created new event type entry for {0} because the fields did not match those of the previously created one. New identifier is {1}", //$NON-NLS-1$
 								identifier, eventTypeEntry.next.eventType.getIdentifier()));
@@ -94,9 +102,13 @@ class RepositoryBuilder implements IEventSinkFactory {
 	}
 
 	private static EventTypeEntry createEventTypeEntry(
-		String identifier, String label, String[] category, String description, List<ValueField> dataStructure) {
+		String identifier, String label, String[] category, String description, List<ValueField> dataStructure,
+		int pipelines) {
 		StructContentType<IItem> eventType = new StructContentType<>(identifier, label, description);
 		IItemFactory itemFactory = ItemBuilder.createItemFactory(eventType, dataStructure);
+		if (pipelines > 0) {
+			return new UnsortedEventTypeEntry(eventType, category, itemFactory, dataStructure, pipelines);
+		}
 		IMemberAccessor<IQuantity, IItem> stAccessor = JfrAttributes.START_TIME.getAccessor(eventType);
 		IMemberAccessor<IQuantity, IItem> etAccessor = JfrAttributes.END_TIME.getAccessor(eventType);
 		if (stAccessor != null && stAccessor != etAccessor) {
@@ -170,6 +182,52 @@ class RepositoryBuilder implements IEventSinkFactory {
 		abstract Collection<IItem[]> buildSortedArrays();
 
 		abstract IEventSink createSink();
+	}
+
+	private static class UnsortedEventTypeEntry extends EventTypeEntry {
+
+		private final List<SimpleArray<IItem>> eventsLanes;
+		private final int pipelines;
+		private int lane = 0;
+
+		public UnsortedEventTypeEntry(StructContentType<IItem> eventType, String[] category, IItemFactory itemFactory,
+				List<ValueField> dataStructure, int pipelines) {
+			super(eventType, category, itemFactory, dataStructure);
+			eventsLanes = new ArrayList<>(pipelines);
+			for (int i = 0; i < pipelines; i++) {
+				eventsLanes.add(new SimpleArray<>(new IItem[0]));
+			}
+			this.pipelines = pipelines;
+		}
+
+		@Override
+		Collection<IItem[]> buildSortedArrays() {
+			return eventsLanes.parallelStream().map(SimpleArray::elements).collect(Collectors.toList());
+		}
+
+		@Override
+		IEventSink createSink() {
+			return new IEventSink() {
+				@Override
+				public void addEvent(Object[] values) {
+					synchronized (eventsLanes) {
+						IItem createEvent = itemFactory.createEvent(values);
+						int size = eventsLanes.size();
+						SimpleArray<IItem> simpleArray = eventsLanes.get(lane);
+						if (simpleArray == null) {
+							simpleArray = new SimpleArray<>(new IItem[0]);
+							eventsLanes.add(lane, simpleArray);
+						}
+						simpleArray.add(createEvent);
+						lane++;
+						if (lane >= pipelines) {
+							lane = 0;
+						}
+					}
+				}
+			};
+		}
+
 	}
 
 	private static class DurationEventTypeEntry extends EventTypeEntry {

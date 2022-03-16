@@ -50,7 +50,7 @@ public class JfrMetadataToolkit {
 	protected static SortedMap<String, SortedMap<String, String>> parseRecordingFile(File recordingFile) {
 		SortedMap<String, SortedMap<String, String>> eventTypeMap = new TreeMap<>();
 		try (InputStream stream = IOToolkit.openUncompressedStream(recordingFile)) {
-			EventArrays eventArrays = FlightRecordingLoader.loadStream(stream, false, false);
+			EventArrays eventArrays = FlightRecordingLoader.loadStream(stream, false, false, 0);
 			for (EventArray entry : eventArrays.getArrays()) {
 				SortedMap<String, String> attrs = new TreeMap<>();
 				for (IAccessorKey<?> a : entry.getType().getAccessorKeys().keySet()) {

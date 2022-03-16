@@ -80,14 +80,10 @@ public class IncreasingMetaspaceLiveSetRule implements IRule {
 	private IResult getResult(
 		IItemCollection items, IPreferenceValueProvider valueProvider, IResultValueProvider resultProvider) {
 		IItemFilter afterFilter = ItemFilters.and(JdkFilters.METASPACE_SUMMARY_AFTER_GC, JdkFilters.AFTER_GC);
-		Iterator<? extends IItemIterable> allAfterItems = items.apply(afterFilter).iterator();
-		if (allAfterItems.hasNext()) {
-			IItemIterable afterItems = allAfterItems.next();
-			// FIXME: Handle multiple IItemIterable
-			IMemberAccessor<IQuantity, IItem> timeAccessor = JfrAttributes.END_TIME.getAccessor(afterItems.getType());
-			IMemberAccessor<IQuantity, IItem> memAccessor = JdkAttributes.GC_METASPACE_USED
-					.getAccessor(afterItems.getType());
-			double leastSquare = RulesToolkit.leastSquareMemory(afterItems.iterator(), timeAccessor, memAccessor);
+		IItemCollection allAfterItems = items.apply(afterFilter);
+		if (allAfterItems.hasItems()) {
+			double leastSquare = RulesToolkit.leastSquareMemory(allAfterItems, JfrAttributes.END_TIME,
+					JdkAttributes.GC_METASPACE_USED);
 			// FIXME: Configuration attribute
 			double score = RulesToolkit.mapExp100(leastSquare, 0.75);
 			// FIXME: Should construct a message using leastSquare, not use a hard limit

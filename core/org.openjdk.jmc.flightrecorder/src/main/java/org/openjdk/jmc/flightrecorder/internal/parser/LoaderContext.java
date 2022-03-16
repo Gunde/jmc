@@ -62,7 +62,7 @@ import org.openjdk.jmc.flightrecorder.parser.IParserExtension;
  * Collects all loaded chunks and combines them to a FlightRecording.
  */
 public class LoaderContext {
-	private final RepositoryBuilder repositoryBuilder = new RepositoryBuilder();
+	private final RepositoryBuilder repositoryBuilder;
 	private final IEventSinkFactory sinkFactory;
 	private final ConcurrentHashMap<Object, CanonicalConstantMap<Object>> constantsByType = new ConcurrentHashMap<>();
 	private final boolean hideExperimentals;
@@ -71,9 +71,10 @@ public class LoaderContext {
 	private final Set<IRange<IQuantity>> chunkRanges;
 	private final ParserStats parserStats = new ParserStats();
 
-	public LoaderContext(List<? extends IParserExtension> extensions, boolean hideExperimentals) {
+	public LoaderContext(List<? extends IParserExtension> extensions, boolean hideExperimentals, int pipelines) {
 		this.extensions = extensions;
 		this.hideExperimentals = hideExperimentals;
+		this.repositoryBuilder = new RepositoryBuilder(pipelines);
 		IEventSinkFactory sinkFactory = repositoryBuilder;
 		// Traverse the list in reverse order so that the first element will create outermost sink factory
 		for (int i = extensions.size() - 1; i >= 0; i--) {
@@ -213,4 +214,5 @@ public class LoaderContext {
 			parserStats.addConstantPoolExtension(ext);
 		}
 	}
+
 }

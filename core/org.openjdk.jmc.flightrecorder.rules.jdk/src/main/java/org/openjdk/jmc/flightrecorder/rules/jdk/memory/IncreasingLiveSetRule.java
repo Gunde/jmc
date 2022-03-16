@@ -137,17 +137,12 @@ public class IncreasingLiveSetRule implements IRule {
 	private IResult getResult(
 		IItemCollection items, IPreferenceValueProvider valueProvider, IResultValueProvider resultProvider) {
 		IQuantity postWarmupTime = getPostWarmupTime(items, valueProvider.getPreferenceValue(CLASSES_LOADED_PERCENT));
-		Iterator<? extends IItemIterable> allAfterItems = items.apply(JdkFilters.HEAP_SUMMARY_AFTER_GC).iterator();
+		IItemCollection allAfterItems = items.apply(JdkFilters.HEAP_SUMMARY_AFTER_GC);
 		double score = 0;
 		IQuantity liveSetIncreasePerSecond = UnitLookup.MEMORY.getUnit(BinaryPrefix.MEBI).quantity(0);
-		if (allAfterItems.hasNext()) {
-			// FIXME: Handle multiple IItemIterable
-			IItemIterable afterItems = allAfterItems.next();
-			IMemberAccessor<IQuantity, IItem> timeAccessor = JfrAttributes.END_TIME.getAccessor(afterItems.getType());
-			IMemberAccessor<IQuantity, IItem> memAccessor = JdkAttributes.HEAP_USED.getAccessor(afterItems.getType());
-
-			liveSetIncreasePerSecond = UnitLookup.MEMORY.getUnit(BinaryPrefix.MEBI)
-					.quantity(RulesToolkit.leastSquareMemory(afterItems.iterator(), timeAccessor, memAccessor));
+		if (allAfterItems.hasItems()) {
+			liveSetIncreasePerSecond = UnitLookup.MEMORY.getUnit(BinaryPrefix.MEBI).quantity(
+					RulesToolkit.leastSquareMemory(allAfterItems, JfrAttributes.END_TIME, JdkAttributes.HEAP_USED));
 
 			if (postWarmupTime == null) {
 				return RulesToolkit.getTooFewEventsResult(this, valueProvider);
