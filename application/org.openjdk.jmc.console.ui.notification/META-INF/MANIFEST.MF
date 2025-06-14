@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-Name: Console Notification Plug-in
 Bundle-SymbolicName: org.openjdk.jmc.console.ui.notification; singleton:=true
-Bundle-Version: 9.0.0.qualifier
+Bundle-Version: 10.0.0.qualifier
 Bundle-Vendor: Oracle Corporation
 Bundle-Localization: plugin
 Require-Bundle: org.openjdk.jmc.ui.common,
@@ -17,7 +17,8 @@ Require-Bundle: org.openjdk.jmc.ui.common,
  org.openjdk.jmc.alert,
  org.openjdk.jmc.flightrecorder.controlpanel.ui,
  org.openjdk.jmc.flightrecorder.controlpanel.ui.configuration,
- org.openjdk.jmc.flightrecorder.configuration
+ org.openjdk.jmc.flightrecorder.configuration,
+ jakarta.inject.jakarta.inject-api
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.openjdk.jmc.console.ui.notification.NotificationPlugin
 Export-Package: org.openjdk.jmc.console.ui.notification,

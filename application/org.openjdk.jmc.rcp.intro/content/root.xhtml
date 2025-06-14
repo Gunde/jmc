@@ -2,7 +2,7 @@
        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!--
    Copyright (c) 2018, 2020, Oracle and/or its affiliates. All rights reserved.
-   Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
+   Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -10,6 +10,17 @@
   <title>Welcome to JDK Mission Control</title>
   <link rel="stylesheet" href="root.css" type="text/css" />
   </head>
+  
+<script>
+function enterKeyPressed(event) {
+      if (event.keyCode == 13) {
+         window.location.href="http://org.eclipse.ui.intro/runAction?class=org.openjdk.jmc.rcp.intro.CloseIntroAction&amp;pluginId=org.openjdk.jmc.rcp.intro";
+         return true;
+      } else {
+         return false;
+      }
+   }
+</script>
 
 <body> 
 <include path="pageparts/banner" />
@@ -115,7 +126,7 @@
 
 </td></tr></table>
 
-<table tabindex="0"><tr><td>
+<table tabindex="0" onkeypress="return enterKeyPressed(event)"><tr><td>
         <a href="http://org.eclipse.ui.intro/runAction?class=org.openjdk.jmc.rcp.intro.CloseIntroAction&amp;pluginId=org.openjdk.jmc.rcp.intro" aria-label="Click here to start using JDK Mission Control">
             <h2> <img src="images/mission_control_64.png"/><include path="strings/gettowork_title" /></h2>
         </a>

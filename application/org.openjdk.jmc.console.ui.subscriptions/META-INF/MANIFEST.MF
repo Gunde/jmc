@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-Name: Subscriptions
 Bundle-SymbolicName: org.openjdk.jmc.console.ui.subscriptions;singleton:=true
 Bundle-Version: 0.0.3.qualifier
@@ -9,6 +9,7 @@ Bundle-Vendor: Oracle Corporation
 Bundle-Localization: plugin
 Require-Bundle: org.openjdk.jmc.console.ui,
  org.eclipse.core.runtime,
- org.openjdk.jmc.rjmx.ui
+ org.openjdk.jmc.rjmx.ui,
+ jakarta.inject.jakarta.inject-api
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.openjdk.jmc.console.ui.subscriptions

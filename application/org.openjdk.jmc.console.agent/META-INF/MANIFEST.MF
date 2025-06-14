@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JMC Agent Plugin
 Bundle-SymbolicName: org.openjdk.jmc.console.agent;singleton:=true
-Bundle-Version: 9.0.0.qualifier
+Bundle-Version: 10.0.0.qualifier
 Bundle-Vendor: Oracle Corporation
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
@@ -14,10 +14,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.e4.core.contexts,
  org.openjdk.jmc.console.ui,
  org.openjdk.jmc.flightrecorder.ui,
- org.openjdk.jmc.rjmx
-Bundle-RequiredExecutionEnvironment: JavaSE-17
-Import-Package: javax.inject,
- org.eclipse.debug.core.sourcelookup.containers
+ org.openjdk.jmc.rjmx,
+ jakarta.inject.jakarta.inject-api
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Import-Package: org.eclipse.debug.core.sourcelookup.containers
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.openjdk.jmc.console.agent.AgentPlugin
 Automatic-Module-Name: org.openjdk.jmc.console.agent

@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2024, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -253,6 +253,13 @@ public class Messages extends NLS {
 	public static String GarbageCollectionsPage_USED_HEAP_BEFORE_GC;
 	public static String GarbageCollectionsPage_USED_HEAP_DELTA;
 	public static String GarbageCollectionsPage_USED_METASPACE_DELTA;
+	public static String HDRHistogramView_NO_VALID_SELECTION_TEXT;
+	public static String HDRHistogramView_DURATION_COLUMN_NAME;
+	public static String HDRHistogramView_EVENT_COUNT_COLUMN_NAME;
+	public static String HDRHistogramView_PERCENTILE_SELECTION;
+	public static String HDRHistogramView_DURATION_SELECTION;
+	public static String HDRHistogramView_DURATIONS_CHART_TITLE;
+	public static String HDRHistogramView_DURATIONS_CHART_DESCRIPTION;
 	public static String HeapPage_LIVE_SIZE_OF_CLASS;
 	public static String HeapPage_OVERLAY_GC;
 	public static String HeapPage_OVERLAY_GC_DESC;
@@ -360,6 +367,10 @@ public class Messages extends NLS {
 	public static String JavaApplicationPage_ROW_CPU_USAGE;
 	public static String JavaApplicationPage_ROW_CPU_USAGE_DESC;
 	public static String JavaApplicationPage_ROW_HEAP_USAGE;
+	public static String JavaApplicationPage_ROW_RSS;
+	public static String JavaApplicationPage_ROW_RSS_DESC;
+	public static String JavaApplicationPage_ROW_THREAD_COUNTS;
+	public static String JavaApplicationPage_ROW_THREAD_COUNTS_DESC;
 	public static String JavaApplicationPage_SELECTED_THREAD;
 	public static String JavaApplicationPage_SELECTED_THREADS;
 	public static String JavaApplicationPage_THREAD_ACTIVITY_ACTION;
@@ -542,6 +553,8 @@ public class Messages extends NLS {
 	public static String STACKTRACE_VIEW_TRACE_IN_GROUP;
 	public static String STACKTRACE_VIEW_TRACE_IN_GROUPS;
 	public static String STACKTRACE_VIEW_TRACE_OF_TOTAL;
+	public static String STACKTRACE_VIEW_TRACE_OF_TOTAL_COUNT;
+	public static String STACKTRACE_VIEW_TRACES_OF_TOTAL_COUNT;
 	public static String STORED_SELECTIONS_SIZE_LESS_THAN_ZERO;
 	public static String STORED_SELECTIONS_SIZE_PREF;
 	public static String STORED_SELECTIONS_SIZE_UNPARSABLE;
@@ -617,6 +630,7 @@ public class Messages extends NLS {
 	public static String VMOperationPage_PAGE_NAME;
 	public static String VMOperationPage_ROW_VM_OPERATIONS;
 	public static String VMOperationPage_TIMELINE_SELECTION;
+	public static String ThreadsPage_LANE_THREAD_ID_TOOLTIP;
 
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
@@ -628,9 +642,9 @@ public class Messages extends NLS {
 	public static String stackTraceMessage(int itemCount, int totalCount, String frameFraction) {
 		String message;
 		if (itemCount == 1) {
-			message = Messages.STACKTRACE_VIEW_TRACE_OF_TOTAL;
+			message = Messages.STACKTRACE_VIEW_TRACE_OF_TOTAL_COUNT;
 		} else {
-			message = Messages.STACKTRACE_VIEW_TRACES_OF_TOTAL;
+			message = Messages.STACKTRACE_VIEW_TRACES_OF_TOTAL_COUNT;
 		}
 		return NLS.bind(message, new Object[] {itemCount, frameFraction, totalCount});
 	}

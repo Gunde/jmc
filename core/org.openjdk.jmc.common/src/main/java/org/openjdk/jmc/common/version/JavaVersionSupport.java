@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2023, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -60,13 +60,22 @@ public class JavaVersionSupport {
 	public static final JavaVersion DEBUG_NON_SAFEPOINTS_IMPLICITLY_ENABLED = JDK_9;
 	// FIXME: Update this if JDK-8054307 is ever backported to 8uX.
 	public static final JavaVersion STRING_IS_BYTE_ARRAY = JDK_9;
+	public static final JavaVersion JDK_10 = new JavaVersion(10, 0);
 	public static final JavaVersion JDK_11_EA = new JavaVersion(true, 11);
 	public static final JavaVersion JFR_NOT_COMMERCIAL = JDK_11_EA;
 	public static final JavaVersion JDK_11 = new JavaVersion(11, 0);
+	public static final JavaVersion JDK_11_0_17 = new JavaVersion(11, 0, 17);
 	public static final JavaVersion JDK_12 = new JavaVersion(12, 0);
 	public static final JavaVersion JDK_13 = new JavaVersion(13, 0);
 	public static final JavaVersion JDK_14 = new JavaVersion(14, 0);
 	public static final JavaVersion JDK_15 = new JavaVersion(15, 0);
 	public static final JavaVersion JDK_16 = new JavaVersion(16, 0);
 	public static final JavaVersion JDK_17 = new JavaVersion(17, 0);
+	public static final JavaVersion JDK_18 = new JavaVersion(18, 0);
+	public static final JavaVersion JDK_19 = new JavaVersion(19, 0);
+	public static final JavaVersion JDK_20 = new JavaVersion(20, 0);
+	public static final JavaVersion JDK_21 = new JavaVersion(21, 0);
+	public static final JavaVersion JDK_22 = new JavaVersion(22, 0);
+	public static final JavaVersion JDK_23 = new JavaVersion(23, 0);
+	public static final JavaVersion JDK_24 = new JavaVersion(24, 0);
 }
